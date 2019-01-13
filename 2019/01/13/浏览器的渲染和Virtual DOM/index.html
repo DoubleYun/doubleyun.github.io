@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="1. 浏览器工作流程 上图解析如下：1) 浏览器会解析三个东西： 一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。 CSS，解析CSS会产生CSS规则树。 Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。  2) 解析完成后，浏览器引擎会通过">
+<meta name="description" content="1. 浏览器工作流程">
 <meta name="keywords" content="JS-DOM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器的渲染和Virtual DOM">
 <meta property="og:url" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual DOM/index.html">
 <meta property="og:site_name" content="DoubleYun">
-<meta property="og:description" content="1. 浏览器工作流程 上图解析如下：1) 浏览器会解析三个东西： 一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。 CSS，解析CSS会产生CSS规则树。 Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。  2) 解析完成后，浏览器引擎会通过">
+<meta property="og:description" content="1. 浏览器工作流程">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/Render-Process-768x250.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/DOM-Tree-01.jpg">
@@ -94,10 +94,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/Render-Process-Skipping-1024x282.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/React-Virtual-DOM-01.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/React-Virtual-DOM-02.png">
-<meta property="og:updated_time" content="2019-01-13T08:44:51.065Z">
+<meta property="og:updated_time" content="2019-01-13T09:02:39.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器的渲染和Virtual DOM">
-<meta name="twitter:description" content="1. 浏览器工作流程 上图解析如下：1) 浏览器会解析三个东西： 一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。 CSS，解析CSS会产生CSS规则树。 Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。  2) 解析完成后，浏览器引擎会通过">
+<meta name="twitter:description" content="1. 浏览器工作流程">
 <meta name="twitter:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/Render-Process-768x250.jpg">
 
 
@@ -309,6 +309,7 @@
 
       
         <h2 id="1-浏览器工作流程"><a href="#1-浏览器工作流程" class="headerlink" title="1. 浏览器工作流程"></a>1. 浏览器工作流程</h2><p><img src="/2019/01/13/浏览器的渲染和Virtual DOM/Render-Process-768x250.jpg" alt="浏览器工作流程"></p>
+<a id="more"></a>
 <h3 id="上图解析如下："><a href="#上图解析如下：" class="headerlink" title="上图解析如下："></a>上图解析如下：</h3><h5 id="1-浏览器会解析三个东西："><a href="#1-浏览器会解析三个东西：" class="headerlink" title="1) 浏览器会解析三个东西："></a>1) 浏览器会解析三个东西：</h5><ul>
 <li>一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。</li>
 <li>CSS，解析CSS会产生CSS规则树。</li>
