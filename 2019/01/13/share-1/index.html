@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/18.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/19.png">
 <meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/20.png">
-<meta property="og:updated_time" content="2019-01-13T10:27:03.857Z">
+<meta property="og:updated_time" content="2019-01-13T10:31:22.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2019-0104--firstShare">
 <meta name="twitter:description" content="一、重排和重绘介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。1、重排和重绘的概念和区别重绘（repaint或redaraw）：重绘是指在浏览器渲染机制中，当盒子的位置、大小以及其他属性，例如颜色、字体大小等，浏览器便把这些都按照各自修改后的特性绘制一遍，将内容呈现在页面上。 触发重绘的条件：改变元素外观属性或改变盒子物理大小。如：color，background-color等。">
@@ -327,7 +327,7 @@
 <p><strong>重排（重构/回流/reflow）：当渲染树中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建, 这就称为回流(reflow/重排)。每个页面至少需要一次回流，就是在页面第一次加载的时候。</strong></p>
 <p><strong>重绘和重排的关系：在回流的时候，浏览器会使渲染树中受到影响的部分失效，并重新构造这部分渲染树，完成回流后，浏览器会重新绘制受影响的部分到屏幕中，该过程称为重绘。</strong></p>
 <p><strong>重排必定会引发重绘，但重绘不一定会引发重排。重排的消耗比重绘的消耗大</strong></p>
-<h2 id="2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："><a href="#2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：" class="headerlink" title="2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："></a><strong>2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：</strong></h2><p><strong>（1）页面渲染初始化；(无法避免)</strong></p>
+<h2 id="2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："><a href="#2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：" class="headerlink" title="2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："></a><strong>2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：</strong></h2><p>（1）页面渲染初始化；(无法避免)**</p>
 <p><strong>（2）添加或删除可见的DOM元素；</strong></p>
 <p><strong>（3）元素位置的改变，或者使用动画；</strong></p>
 <p><strong>（4）元素尺寸的改变——大小，外边距，边框；</strong></p>
