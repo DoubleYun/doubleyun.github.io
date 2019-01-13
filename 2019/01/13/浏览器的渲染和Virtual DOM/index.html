@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JS-DOM,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 浏览器工作流程 上图解析如下：1) 浏览器会解析三个东西： 一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。 CSS，解析CSS会产生CSS规则树。 Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。  2) 解析完成后，浏览器引擎会通过">
+<meta name="keywords" content="JS-DOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器的渲染和Virtual DOM">
+<meta property="og:url" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual DOM/index.html">
+<meta property="og:site_name" content="DoubleYun">
+<meta property="og:description" content="1. 浏览器工作流程 上图解析如下：1) 浏览器会解析三个东西： 一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。 CSS，解析CSS会产生CSS规则树。 Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。  2) 解析完成后，浏览器引擎会通过">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/Render-Process-768x250.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/DOM-Tree-01.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/DOM-Tree-02.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/CSS-Parser-01.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/Render-Process-Skipping-1024x282.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/React-Virtual-DOM-01.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/React-Virtual-DOM-02.png">
+<meta property="og:updated_time" content="2019-01-13T08:44:51.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器的渲染和Virtual DOM">
+<meta name="twitter:description" content="1. 浏览器工作流程 上图解析如下：1) 浏览器会解析三个东西： 一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。 CSS，解析CSS会产生CSS规则树。 Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。  2) 解析完成后，浏览器引擎会通过">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual%20DOM/Render-Process-768x250.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual DOM/">
+
+
+
+
+
+  <title>浏览器的渲染和Virtual DOM | DoubleYun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DoubleYun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/13/浏览器的渲染和Virtual DOM/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhouyunyun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DoubleYun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浏览器的渲染和Virtual DOM</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-13T15:41:15+08:00">
+                2019-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-浏览器工作流程"><a href="#1-浏览器工作流程" class="headerlink" title="1. 浏览器工作流程"></a>1. 浏览器工作流程</h2><p><img src="/2019/01/13/浏览器的渲染和Virtual DOM/Render-Process-768x250.jpg" alt="浏览器工作流程"></p>
+<h3 id="上图解析如下："><a href="#上图解析如下：" class="headerlink" title="上图解析如下："></a>上图解析如下：</h3><h5 id="1-浏览器会解析三个东西："><a href="#1-浏览器会解析三个东西：" class="headerlink" title="1) 浏览器会解析三个东西："></a>1) 浏览器会解析三个东西：</h5><ul>
+<li>一个是HTML/SVG/XHTML，事实上，Webkit有三个C++的类对应这三类文档。解析这三种文件会产生一个DOM Tree。</li>
+<li>CSS，解析CSS会产生CSS规则树。</li>
+<li>Javascript，脚本，主要是通过DOM API和CSSOM API来操作DOM Tree和CSS Rule Tree。</li>
+</ul>
+<h5 id="2-解析完成后，浏览器引擎会通过DOM-Tree和CSS-Rule-Tree来构造Rendering-Tree。注意："><a href="#2-解析完成后，浏览器引擎会通过DOM-Tree和CSS-Rule-Tree来构造Rendering-Tree。注意：" class="headerlink" title="2) 解析完成后，浏览器引擎会通过DOM Tree和CSS Rule Tree来构造Rendering Tree。注意："></a>2) 解析完成后，浏览器引擎会通过DOM Tree和CSS Rule Tree来构造Rendering Tree。注意：</h5><ul>
+<li>Rendering Tree渲染树并不等同于DOM树，因为一些像Header或<code>display:none;</code>的东西就没必要放在渲染树中了。</li>
+<li>CSS的Rule Tree主要是为了完成匹配并把CSS Rule附加上Rendering Tree上的每个Element。也就是DOM节点。也就是所谓的Frame。</li>
+<li>然后，计算每个Frame（也就是每个Element）的位置，这又叫layout和reflow过程。</li>
+</ul>
+<h5 id="3-最后通过调用操作系统Native-GUI的API绘制。"><a href="#3-最后通过调用操作系统Native-GUI的API绘制。" class="headerlink" title="3) 最后通过调用操作系统Native GUI的API绘制。"></a>3) 最后通过调用操作系统Native GUI的API绘制。</h5><h2 id="2-DOM解析"><a href="#2-DOM解析" class="headerlink" title="2. DOM解析"></a>2. DOM解析</h2><p>HTML的DOM Tree解析如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;</span><br><span class="line">	    &lt;title&gt;Web page parsing&lt;/title&gt;</span><br><span class="line">	&lt;/head&gt;</span><br><span class="line">	&lt;body&gt;</span><br><span class="line">	    &lt;div&gt;</span><br><span class="line">	        &lt;h1&gt;Web page parsing&lt;/h1&gt;</span><br><span class="line">	        &lt;p&gt;This is an example Web page.&lt;/p&gt;</span><br><span class="line">	    &lt;/div&gt;</span><br><span class="line">	&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>上面这段HTML会解析成这样：<br><img src="/2019/01/13/浏览器的渲染和Virtual DOM/DOM-Tree-01.jpg" alt="HTML的DOM Tree解析"><br>有SVG标签的情况：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;title&gt;Web page parsing&lt;/title&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;h1&gt;Web page parsing&lt;/h1&gt;</span><br><span class="line">            &lt;svg width=&quot;300&quot; height=&quot;180&quot;&gt;</span><br><span class="line">            	&lt;line x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;200&quot; y2=&quot;0&quot; style=&quot;stroke:rgb(0,0,0);stroke-width:5&quot; /&gt;</span><br><span class="line">            	&lt;g id=&quot;myCircle&quot;&gt;</span><br><span class="line">              		&lt;ellipse cx=&quot;60&quot; cy=&quot;60&quot; ry=&quot;40&quot; rx=&quot;20&quot; stroke=&quot;black&quot; stroke-width=&quot;5&quot; fill=&quot;silver&quot;/&gt;</span><br><span class="line">                	&lt;text x=&quot;25&quot; y=&quot;20&quot;&gt;This is an example Web page.&lt;/text&gt;</span><br><span class="line">            	&lt;/g&gt;</span><br><span class="line">            &lt;/svg&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/body&gt;		</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/01/13/浏览器的渲染和Virtual DOM/DOM-Tree-02.jpg" alt="HTML有SVG的DOM Tree解析"></p>
+<h2 id="3-CSS解析"><a href="#3-CSS解析" class="headerlink" title="3. CSS解析"></a>3. CSS解析</h2><p>CSS Parser将CSS解析成Style Rules，Style Rules也叫CSSOM（CSS Object Model）。<br>StyleRules也是一个树形结构，根据CSS文件整理出来的类似DOM Tree的树形结构：</p>
+<p><img src="/2019/01/13/浏览器的渲染和Virtual DOM/CSS-Parser-01.png" alt="Style Rules"></p>
+<p>于HTML Parser相似，CSS Parser作用就是将很多个CSS文件中的样式合并解析出具有树形结构Style Rules。</p>
+<h2 id="4-脚本处理"><a href="#4-脚本处理" class="headerlink" title="4. 脚本处理"></a>4. 脚本处理</h2><p>浏览器解析文档，当遇到<code>&lt;script&gt;</code>标签的时候，会立即解析脚本，停止解析文档（因为JS可能会改动DOM和CSS，所以继续解析会造成浪费）。<br>如果脚本是外部的，会等待脚本下载完毕，再继续解析文档。现在可以在script标签上增加属性 <code>defer</code>或者<code>async</code>。<br>脚本解析会将脚本中改变DOM和CSS的地方分别解析出来，追加到DOM Tree和Style Rules上。</p>
+<h2 id="5-渲染"><a href="#5-渲染" class="headerlink" title="5. 渲染"></a>5. 渲染</h2><h3 id="渲染的流程基本上如下（黄色的四个步骤）："><a href="#渲染的流程基本上如下（黄色的四个步骤）：" class="headerlink" title="渲染的流程基本上如下（黄色的四个步骤）："></a>渲染的流程基本上如下（黄色的四个步骤）：</h3><ol>
+<li>计算CSS样式</li>
+<li>构建Render Tree</li>
+<li>Layout 定位坐标的大小，是否换行，各种position，overflow，z-index属性……</li>
+<li>正式开画<br><img src="/2019/01/13/浏览器的渲染和Virtual DOM/Render-Process-Skipping-1024x282.jpg" alt="渲染流程图"></li>
+</ol>
+<p><strong>注意： 上图流程中有很多连接线，这表示了Javascript动态修改了DOM属性或是CSS属性会导致重新Layout，有些改变不会，就是那些指到天上的箭头，比如，修改后的CSS rule没有被匹配到等</strong></p>
+<h5 id="这里重要说两个概念，一个是Reflow，另一个是Repaint。"><a href="#这里重要说两个概念，一个是Reflow，另一个是Repaint。" class="headerlink" title="这里重要说两个概念，一个是Reflow，另一个是Repaint。"></a>这里重要说两个概念，一个是Reflow，另一个是Repaint。</h5><ul>
+<li>Repaint——屏幕的一部分要重画，比如某个CSS的背景色变了。但是元素的几何尺寸没有变。</li>
+<li>Reflow——意味着元件的几何尺寸变了，我们需要重新验证并计算Render Tree。是Render Tree的一部分或者全部发生了变化。这就是Reflow，或是Layout。（<strong>HTML使用的是flow based layout，也就是流式布局，所以，如果某元件的几何尺寸发生了变化，需要重新布局，也就叫reflow</strong>）reflow会从<code>&lt;html&gt;</code>这个root frame开始递归往下，依次计算所有的节点几何尺寸和位置，在reflow过程中，可能会增加一些frame，比如一个文本字符串必须被包装起来。</li>
+</ul>
+<p>Relfow的成本比Repaint的成本高得多得多。DOM Tree里的每个节点都会有reflow方法，一个节点的reflow很有可能导致子节点，甚至父节点以及同节点的reflow。<strong>在一些高性能的电脑上也许还没什么，但是如果reflow发生在手机上，那么这个过程是非常痛苦和耗电的。</strong></p>
+<p>所以，以下这些动作有很大可能会是成本比较高的。</p>
+<ul>
+<li>当你增加、删除、修改DOM节点时，会导致Reflow或Repaint</li>
+<li>当你移动DOM的位置，或是搞个动画的时候</li>
+<li>当你修改CSS样式的时候</li>
+<li>当你Resize窗口的时候，或者滚动的时候</li>
+<li>当你修改网页的默认字体时</li>
+</ul>
+<p><strong>注： dispaly:none会触发reflow，而visibility:hidden只会触发repaint，因为没有发现位置变化。</strong></p>
+<p>多说两句关于滚屏的事，通常来说，如果在滚屏的时候，我们的页面上的所有的像素都会跟着滚动，那么性能上没什么问题，因为我们的显卡对于这种把全屏像素往上往下移的算法是很快。<strong>但是如果你有一个fixed的背景图，或是有些Element不跟着滚动，有些Elment是动画，那么这个滚动的动作对于浏览器来说会是相当相当痛苦的一个过程。</strong>你可以看到很多这样的网页在滚动的时候性能有多差。因为滚屏也有可能会造成reflow。</p>
+<p>基本上来说，reflow有如下的几个原因：</p>
+<ul>
+<li>初始化（Initial）。网页初始化的时候。</li>
+<li>渐进（Incremental）。一些Javascript在操作DOM Tree时。</li>
+<li>改变大小（Resize）。其些元件的尺寸变了（包括外边距、内边框、边框大小、高度和宽度等）。</li>
+<li>样式改变（StyleChange）。如果CSS的属性发生变化了。</li>
+<li>Dirty。几个Incremental的reflow发生在同一个frame的子树上。</li>
+</ul>
+<p>好了，我们来看一个示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var bstyle = document.body.style; // cache</span><br><span class="line"></span><br><span class="line">bstyle.padding = &quot;20px&quot;; // reflow，repaint</span><br><span class="line">bstyle.border = &quot;10px solid red&quot;; // reflow，repaint</span><br><span class="line"></span><br><span class="line">bstyle.color = &quot;blue&quot;; // repaint</span><br><span class="line">bstyle.backgroundColor = &quot;#fad&quot;; // repaint</span><br><span class="line"></span><br><span class="line">bstyle.fontSize = &quot;2em&quot;; // reflow，repaint</span><br><span class="line"></span><br><span class="line">// new DOM element - reflow，repaint</span><br><span class="line">document.body.appendChild(document.createTextNode(&apos;dode!&apos;));</span><br></pre></td></tr></table></figure>
+<p>当然，我们的浏览器是聪明的，它不会像上面那样，你每改一次样式，它就reflow或repaint一次。<strong>一般来说，浏览器会把这样的操作积攒一批，然后做一次reflow，这又叫异步reflow或增量异步reflow。</strong>但是有些情况浏览器是不会这么做的，比如：resize窗口，改变了页面默认的字体等。对于这些操作，浏览器会马上进行reflow。</p>
+<p>但是有些时候，我们的脚本会阻止浏览器这么干，比如，如果我们请求下面的一些DOM值：</p>
+<ol>
+<li>offsetTop, offsetLeft, offsetWidth, offsetHeight</li>
+<li>scrollTop, scrollLeft, scrollWidth, scrollHeight</li>
+<li>clientTop, clientLeft, clientWidth, clientHeight</li>
+<li>IE中的 getComputedStyle(), 或 currentStyle</li>
+</ol>
+<p>因为，如果我们的程序需要这些值，那么浏览器需要返回最新的值，而这样一样会flush出去一些样式的改变，从而造成频繁的reflow/repaint。</p>
+<h2 id="6-减少reflow-回流-repaint-重绘"><a href="#6-减少reflow-回流-repaint-重绘" class="headerlink" title="6. 减少reflow(回流)/repaint(重绘)"></a>6. 减少reflow(回流)/repaint(重绘)</h2><p><strong>1） 不要一条一条地修改DOM的样式。与其这样，还不如预先定义好css的class，DOM的className。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">var left = 10,</span><br><span class="line">top = 10;</span><br><span class="line">el.style.left = left + &quot;px&quot;;</span><br><span class="line">el.style.top  = top  + &quot;px&quot;;</span><br><span class="line"> </span><br><span class="line">// Good</span><br><span class="line">el.className += &quot; theclassname&quot;;</span><br><span class="line"> </span><br><span class="line">// Good</span><br><span class="line">el.style.cssText += &quot;; left: &quot; + left + &quot;px; top: &quot; + top + &quot;px;&quot;;</span><br></pre></td></tr></table></figure>
+<p><strong>2） 把DOM离线后修改。如：</strong></p>
+<ul>
+<li><p>先把DOM给display:none(有一次reflow)，然后你想怎么改就怎么改。比如修改100次，然后再把他显示出来。</p>
+<p>function appendDataToElement(appendToElement, data) {</p>
+<pre><code>    let li;
+    for (let i = 0; i &lt; data.length; i++) {
+        li = document.createElement(&apos;li&apos;);
+        li.textContent = &apos;text&apos;;
+        appendToElement.appendChild(li);
+    }
+}
+const ul = document.getElementById(&apos;list&apos;);
+ul.style.display = &apos;none&apos;;
+appendDataToElement(ul, data);
+ul.style.display = &apos;block&apos;;
+</code></pre></li>
+<li><p>使用文档片段(document fragment)在当前DOM之外构建一个子树，再把它拷贝回文档。</p>
+<p>const ul = document.getElementById(‘list’);<br>​    const fragment = document.createDocumentFragment();<br>​    appendDataToElement(fragment, data);<br>​    ul.appendChild(fragment);</p>
+</li>
+<li><p>clone一个DOM结点到内存里，然后想怎么改就怎么改，改完后，和在线的那个的交换一下。</p>
+<p>const ul = document.getElementById(‘list’);<br>​    const clone = ul.cloneNode(true);<br>​    appendDataToElement(clone, data);<br>​    ul.parentNode.replaceChild(clone, ul);</p>
+<p><em>浏览器会使用队列来储存多次修改，进行优化，所以对这个优化方案，我们其实不用优先考虑。</em></p>
+</li>
+</ul>
+<p><strong>3） 不要把DOM节点的属性值放在一个循环里当成循环里的变量。</strong>不然这会导致大量地读写这个结点的属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">function initP() &#123;</span><br><span class="line">	for (let i = 0; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">		paragraphs[i].style.width = box.offsetWidth + &apos;px&apos;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// good</span><br><span class="line">const width = box.offsetWidth;</span><br><span class="line">function initP() &#123;</span><br><span class="line">	for (let i = 0; i &lt; paragraphs.length; i++) &#123;</span><br><span class="line">		paragraphs[i].style.width = width + &apos;px&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>4） 尽可能的修改层级比较低的DOM。</strong>当然，改变层级比较底的DOM有可能会造成大面积的reflow，但是也可能影响范围很小。</p>
+<p><strong>5） 为动画的HTML元件使用fixed或absoult的position，</strong>对于复杂动画效果，由于会经常的引起回流重绘，因此，我们可以使用绝对定位，让它脱离文档流。否则会引起父元素以及后续元素频繁的回流。</p>
+<p><strong>6） 千万不要使用table布局。</strong>因为可能很小的一个小改动会造成整个table的重新布局。</p>
+<h2 id="7-Virtual-DOM"><a href="#7-Virtual-DOM" class="headerlink" title="7. Virtual DOM"></a>7. Virtual DOM</h2><h3 id="什么是Virtual-Dom"><a href="#什么是Virtual-Dom" class="headerlink" title="什么是Virtual Dom"></a>什么是Virtual Dom</h3><p>Virtual Dom可以看做一棵模拟了DOM树的JavaScript树，其主要是通过vnode,实现一个无状态的组件，当组件状态发生更新时，然后触发Virtual Dom数据的变化，然后通过Virtual Dom和真实DOM的比对，再对真实DOM更新。可以简单认为Virtual Dom是真实DOM的缓存。</p>
+<h3 id="为什么用Virtual-Dom"><a href="#为什么用Virtual-Dom" class="headerlink" title="为什么用Virtual Dom"></a>为什么用Virtual Dom</h3><p>我们知道，当我们希望实现一个具有复杂状态的界面时，如果我们在每个可能发生变化的组件上都绑定事件，绑定字段数据，那么很快由于状态太多，我们需要维护的事件和字段将会越来越多，代码也会越来越复杂，于是，我们想我们可不可以将视图和状态分开来，只要视图发生变化，对应状态也发生变化，然后状态变化，我们再重绘整个视图就好了。</p>
+<p>这样的想法虽好，但是代价太高了，于是我们又想，能不能只更新状态发生变化的视图？<strong>于是Virtual Dom应运而生，状态变化先反馈到Virtual Dom上，Virtual Dom在找到最小更新视图，最后批量更新到真实DOM上，从而达到性能的提升。</strong></p>
+<p>除此之外，从移植性上看，Virtual Dom还对真实dom做了一次抽象，这意味着Virtual Dom对应的可以不是浏览器的DOM，而是不同设备的组件，极大的方便了多平台的使用。如果是要实现前后端同构直出方案，使用Virtual Dom的框架实现起来是比较简单的，因为在服务端的Virtual Dom跟浏览器DOM接口并没有绑定关系。</p>
+<p>基于 Virtual DOM 的数据更新与UI同步机制:</p>
+<p>初始渲染时，首先将数据渲染为 Virtual DOM，然后由 Virtual DOM 生成 DOM。</p>
+<p><img src="/2019/01/13/浏览器的渲染和Virtual DOM/React-Virtual-DOM-01.png" alt="React-初始渲染"></p>
+<p>数据更新时，渲染得到新的 Virtual DOM，与上一次得到的 Virtual DOM 进行 diff，得到所有需要在 DOM 上进行的变更，然后在 patch 过程中应用到 DOM 上实现UI的同步更新。</p>
+<p><img src="/2019/01/13/浏览器的渲染和Virtual DOM/React-Virtual-DOM-02.png" alt="React-数据更新"></p>
+<p>相关链接：</p>
+<ul>
+<li><a href="https://github.com/livoras/blog/issues/13" target="_blank" rel="noopener">深度剖析：如何实现一个 Virtual DOM 算法</a></li>
+<li><a href="https://github.com/Matt-Esch/virtual-dom" target="_blank" rel="noopener">Matt-Esch/Virtual-DOM</a></li>
+<li><a href="https://github.com/snabbdom/snabbdom" target="_blank" rel="noopener">Snabbdom</a></li>
+</ul>
+<p>Virtual DOM主要是实现h(创建Virtual Tree), createElement(创建真实DOM), diff(对比)， patch(更新真实DOM)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">// 1. 构建虚拟DOM</span><br><span class="line">var tree = h(&apos;div.foo#some-id&apos;, [</span><br><span class="line">    h(&apos;span&apos;, &apos;some text&apos;),</span><br><span class="line">    h(&apos;input&apos;, &#123; type: &apos;text&apos;, value: &apos;foo&apos; &#125;)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">// 2. 通过虚拟DOM构建真正的DOM</span><br><span class="line">var root = createElement(tree)</span><br><span class="line">document.body.appendChild(root)</span><br><span class="line"></span><br><span class="line">// 3. 更新，生成新的虚拟DOM</span><br><span class="line">var newTree = h(&apos;div.foo#some-id&apos;, [</span><br><span class="line">    h(&apos;span&apos;, &apos;some new text&apos;),</span><br><span class="line">    h(&apos;input&apos;, &#123; type: &apos;text&apos;, value: &apos;foo&apos; &#125;),</span><br><span class="line">	h(&apos;div&apos;, &apos;new dom&apos;)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">// 4. 比较两棵虚拟DOM树的不同</span><br><span class="line">var patches = diff(tree, newTree)</span><br><span class="line"></span><br><span class="line">// 5. 在真正的DOM元素上应用变更</span><br><span class="line">patch(root, patches)</span><br></pre></td></tr></table></figure>
+<p>Snabbdom主要是实现h(创建虚拟DOM节点)，patch(创建或更新真实DOM)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">var container = document.getElementById(&apos;container&apos;);</span><br><span class="line"></span><br><span class="line">var vnode = h(</span><br><span class="line">	&apos;div#container.two.classes&apos;,</span><br><span class="line">	&#123;on: &#123;click: someFn&#125;&#125;,</span><br><span class="line">	[</span><br><span class="line">  	  h(</span><br><span class="line">  	  	&apos;span&apos;,</span><br><span class="line">  	  	&#123;style: &#123;fontWeight: &apos;bold&apos;&#125;&#125;,</span><br><span class="line">  	  	&apos;This is bold&apos;</span><br><span class="line">  	  ),</span><br><span class="line">  	  &apos; and this is just normal text&apos;,</span><br><span class="line">      h(</span><br><span class="line">      	&apos;a&apos;,</span><br><span class="line">      	&#123;props: &#123;href: &apos;/foo&apos;&#125;&#125;,</span><br><span class="line">      	&apos;I\&apos;ll take you places!&apos;</span><br><span class="line">      )</span><br><span class="line">]);</span><br><span class="line">// Patch into empty DOM element – this modifies the DOM as a side effect</span><br><span class="line">patch(container, vnode);</span><br><span class="line"></span><br><span class="line">var newVnode = h(</span><br><span class="line">	&apos;div#container.two.classes&apos;,</span><br><span class="line">	&#123;on: &#123;click: anotherEventHandler&#125;&#125;,</span><br><span class="line">	[</span><br><span class="line">  		h(</span><br><span class="line">  			&apos;span&apos;,</span><br><span class="line">  			&#123;style: &#123;fontWeight: &apos;normal&apos;, fontStyle: &apos;italic&apos;&#125;&#125;,</span><br><span class="line">  			&apos;This is now italic type&apos;</span><br><span class="line">  		),</span><br><span class="line">  		&apos; and this is still just normal text&apos;,</span><br><span class="line">  		h(</span><br><span class="line">  			&apos;a&apos;,</span><br><span class="line">  			&#123;props: &#123;href: &apos;/bar&apos;&#125;&#125;,</span><br><span class="line">  			&apos;I\&apos;ll take you places!&apos;</span><br><span class="line">  		)</span><br><span class="line">]);</span><br><span class="line">// Second `patch` invocation</span><br><span class="line">patch(vnode, newVnode); // Snabbdom efficiently updates the old view to the new state</span><br></pre></td></tr></table></figure>
+<p>性能优化</p>
+<p>其实提到 Virtual DOM 的差异比对，有人会对其内部如何处理数组感兴趣。的确，如果数组元素的位置发生了改变，这个要识别起来是有点麻烦。为此，上面两个库，Vue和React 其实都在 Virtual Node 上额外记录了一个<strong>属性“key”</strong>，就是用来辅助进行 Virtual Node 的比对。</p>
+<p><em>参考资料：</em></p>
+<ol>
+<li><a href="https://coolshell.cn/articles/9666.html" target="_blank" rel="noopener">浏览器的渲染原理简介</a></li>
+<li><a href="https://mp.weixin.qq.com/s/BboZ5wxNaXXjpAFignOYdw" target="_blank" rel="noopener">你真的了解回流和重绘吗?</a></li>
+<li><a href="https://www.jianshu.com/p/bef1c1ee5a0e" target="_blank" rel="noopener">一起理解 Virtual DOM</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS-DOM/" rel="tag"># JS-DOM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/13/Python爬虫入门/" rel="next" title="Python爬虫入门">
+                <i class="fa fa-chevron-left"></i> Python爬虫入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="zhouyunyun">
+            
+              <p class="site-author-name" itemprop="name">zhouyunyun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-浏览器工作流程"><span class="nav-number">1.</span> <span class="nav-text">1. 浏览器工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#上图解析如下："><span class="nav-number">1.1.</span> <span class="nav-text">上图解析如下：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-浏览器会解析三个东西："><span class="nav-number">1.1.0.1.</span> <span class="nav-text">1) 浏览器会解析三个东西：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-解析完成后，浏览器引擎会通过DOM-Tree和CSS-Rule-Tree来构造Rendering-Tree。注意："><span class="nav-number">1.1.0.2.</span> <span class="nav-text">2) 解析完成后，浏览器引擎会通过DOM Tree和CSS Rule Tree来构造Rendering Tree。注意：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-最后通过调用操作系统Native-GUI的API绘制。"><span class="nav-number">1.1.0.3.</span> <span class="nav-text">3) 最后通过调用操作系统Native GUI的API绘制。</span></a></li></ol></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#2-DOM解析"><span class="nav-number">2.</span> <span class="nav-text">2. DOM解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-CSS解析"><span class="nav-number">3.</span> <span class="nav-text">3. CSS解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-脚本处理"><span class="nav-number">4.</span> <span class="nav-text">4. 脚本处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-渲染"><span class="nav-number">5.</span> <span class="nav-text">5. 渲染</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#渲染的流程基本上如下（黄色的四个步骤）："><span class="nav-number">5.1.</span> <span class="nav-text">渲染的流程基本上如下（黄色的四个步骤）：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#这里重要说两个概念，一个是Reflow，另一个是Repaint。"><span class="nav-number">5.1.0.1.</span> <span class="nav-text">这里重要说两个概念，一个是Reflow，另一个是Repaint。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-减少reflow-回流-repaint-重绘"><span class="nav-number">6.</span> <span class="nav-text">6. 减少reflow(回流)/repaint(重绘)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Virtual-DOM"><span class="nav-number">7.</span> <span class="nav-text">7. Virtual DOM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Virtual-Dom"><span class="nav-number">7.1.</span> <span class="nav-text">什么是Virtual Dom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么用Virtual-Dom"><span class="nav-number">7.2.</span> <span class="nav-text">为什么用Virtual Dom</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhouyunyun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
