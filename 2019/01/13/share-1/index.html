@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、重排和重绘介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。1、重排和重绘的概念和区别重绘（repaint或redaraw）：重绘是指在浏览器渲染机制中，当盒子的位置、大小以及其他属性，例如颜色、字体大小等，浏览器便把这些都按照各自修改后的特性绘制一遍，将内容呈现在页面上。 触发重绘的条件：改变元素外观属性或改变盒子物理大小。如：color，background-color等。">
+<meta name="keywords" content="JS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019-0104--firstShare">
+<meta property="og:url" content="http://yoursite.com/2019/01/13/share-1/index.html">
+<meta property="og:site_name" content="DoubleYun">
+<meta property="og:description" content="一、重排和重绘介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。1、重排和重绘的概念和区别重绘（repaint或redaraw）：重绘是指在浏览器渲染机制中，当盒子的位置、大小以及其他属性，例如颜色、字体大小等，浏览器便把这些都按照各自修改后的特性绘制一遍，将内容呈现在页面上。 触发重绘的条件：改变元素外观属性或改变盒子物理大小。如：color，background-color等。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/5.png">
+<meta property="og:image" content="https://images-cdn.shimo.im/IjWNAgEkBccNF8EF/7cc17f3b9ce5f0d879fdfa2be9a54ca0_hd.jpg!thumbnail">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/8.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/9.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/10.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/11.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/12.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/13.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/14.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/16.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/17.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/18.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/19.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/13/share-1/20.png">
+<meta property="og:updated_time" content="2019-01-13T10:22:20.152Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2019-0104--firstShare">
+<meta name="twitter:description" content="一、重排和重绘介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。1、重排和重绘的概念和区别重绘（repaint或redaraw）：重绘是指在浏览器渲染机制中，当盒子的位置、大小以及其他属性，例如颜色、字体大小等，浏览器便把这些都按照各自修改后的特性绘制一遍，将内容呈现在页面上。 触发重绘的条件：改变元素外观属性或改变盒子物理大小。如：color，background-color等。">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/13/share-1/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/13/share-1/">
+
+
+
+
+
+  <title>2019-0104--firstShare | DoubleYun</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DoubleYun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/13/share-1/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhouyunyun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DoubleYun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2019-0104--firstShare</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-13T17:45:35+08:00">
+                2019-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、重排和重绘"><a href="#一、重排和重绘" class="headerlink" title="一、重排和重绘"></a><strong>一、重排和重绘</strong></h1><h3 id="介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。"><a href="#介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。" class="headerlink" title="介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。"></a><strong>介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。</strong></h3><h2 id="1、重排和重绘的概念和区别"><a href="#1、重排和重绘的概念和区别" class="headerlink" title="1、重排和重绘的概念和区别"></a><strong>1、重排和重绘的概念和区别</strong></h2><p><strong>重绘（repaint或redaraw）：重绘是指在浏览器渲染机制中，当盒子的位置、大小以及其他属性，例如颜色、字体大小等，浏览器便把这些都按照各自修改后的特性绘制一遍，将内容呈现在页面上。</strong></p>
+<p><strong>触发重绘的条件：改变元素外观属性或改变盒子物理大小。如：color，background-color等。</strong></p>
+<a id="more"></a>
+<p><strong>重排（重构/回流/reflow）：当渲染树中的一部分(或全部)因为元素的规模尺寸，布局，隐藏等改变而需要重新构建, 这就称为回流(reflow/重排)。每个页面至少需要一次回流，就是在页面第一次加载的时候。</strong></p>
+<p><strong>重绘和重排的关系：在回流的时候，浏览器会使渲染树中受到影响的部分失效，并重新构造这部分渲染树，完成回流后，浏览器会重新绘制受影响的部分到屏幕中，该过程称为重绘。</strong></p>
+<p><strong>重排必定会引发重绘，但重绘不一定会引发重排。重排的消耗比重绘的消耗大</strong></p>
+<h2 id="2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："><a href="#2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：" class="headerlink" title="2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："></a><strong>2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：</strong></h2><p><strong>（1）页面渲染初始化；(无法避免)</strong></p>
+<p><strong>（2）添加或删除可见的DOM元素；</strong></p>
+<p><strong>（3）元素位置的改变，或者使用动画；</strong></p>
+<p><strong>（4）元素尺寸的改变——大小，外边距，边框；</strong></p>
+<p><strong>（5）浏览器窗口尺寸的变化（resize事件发生时）；</strong></p>
+<p><strong>（6）填充内容的改变，比如文本的改变或图片大小改变而引起的计算值宽度和高度的改变；</strong></p>
+<p><strong>（7）读取某些元素属性导致flush浏览器队列：（offsetLeft/Top/Height/Width,　clientTop/Left/Width/Height,　scrollTop/Left/Width/Height,　width/height,　getComputedStyle(),　currentStyle(IE)　)</strong></p>
+<h2 id="3、重绘发生的情况："><a href="#3、重绘发生的情况：" class="headerlink" title="3、重绘发生的情况："></a><strong>3、重绘发生的情况：</strong></h2><p><strong>重绘发生在元素的可见的外观被改变，但并没有影响到布局的时候。比如，仅修改DOM元素的字体颜色（只有Repaint，因为不需要调整布局）</strong></p>
+<p><strong>重绘重排的代价：耗时，导致浏览器卡慢。</strong></p>
+<h2 id="4、几种优化方案："><a href="#4、几种优化方案：" class="headerlink" title="4、几种优化方案："></a><strong>4、几种优化方案：</strong></h2><h2 id="（1）浏览器自己的优化："><a href="#（1）浏览器自己的优化：" class="headerlink" title="（1）浏览器自己的优化："></a><strong>（1）浏览器自己的优化：</strong></h2><p><strong>浏览器会维护1个队列，把所有会引起回流、重绘的操作放入这个队列，等队列中的操作到了一定的数量或者到了一定的时间间隔，浏览器就会flush队列，进行一个批处理。这样就会让多次的回流、重绘变成一次回流重绘。</strong></p>
+<p><strong>另一种优化技巧是，在运行几段JavaScript代码时，浏览器会缓存这些改变，在代码运行完毕后再将这些改变一次执行完成。举个例子，下面这段代码只会触发一个reflow和repaint：</strong></p>
+<p><strong>var $body = $(‘body’);</strong></p>
+<p><strong>$body.css(‘padding’, ‘1px’); // reflow, repaint</strong></p>
+<p><strong>$body.css(‘color’, ‘red’); // repaint</strong></p>
+<p><strong>$body.css(‘margin’, ‘2px’); // reflow, repaint</strong></p>
+<p><strong>// only 1 reflow and repaint will actually happen</strong></p>
+<p><strong>然而，如前所述，改变元素的物理属性会触发强制性的重排。如果我们在上面的代码块中加入一行代码，用来访问元素的属性，就会发生这种现象。</strong></p>
+<p><strong>var $body = $(‘body’);</strong></p>
+<p><strong>$body.css(‘padding’, ‘1px’);</strong></p>
+<p><strong>$body.css(‘padding’)**</strong>; // reading a property, a forced reflow**</p>
+<p><strong>$body.css(‘color’, ‘red’);</strong></p>
+<p><strong>$body.css(‘margin’, ‘2px’);</strong></p>
+<p><strong>其结果就是，重排发生了两次。因此，你应该把访问元素属性的操作都组织在一起，从而优化网页性能。</strong></p>
+<h2 id="（2）我们要注意的优化："><a href="#（2）我们要注意的优化：" class="headerlink" title="（2）我们要注意的优化："></a><strong>（2）我们要注意的优化：</strong></h2><p><strong>我们要减少重绘和重排就是要减少对渲染树的操作，则我们可以合并多次的DOM和样式的修改。并减少对style样式的请求：</strong></p>
+<p><strong><1>直接改变元素的className</1></strong></p>
+<p><strong><2>display：none；先设置元素为display：none；然后进行页面布局等操作；设置完成后将元素设置为display：block；这样的话就只引发两次重绘和重排；</2></strong></p>
+<p><strong>使用display:none，不使用visibility，也不要改变它的z-index。</strong></p>
+<p><strong><3>不要经常访问浏览器的flush队列属性；如果一定要访问，可以利用缓存。将访问的值用变量存储起来，接下来使用就不会再引发回流；</3></strong></p>
+<p><strong>不要把某些DOM节点的属性值放在一个循环里当成循环的变量，当你向浏览器请求一些 style信息的时候，就会让浏览器flush队列，比如 :</strong></p>
+<p>​    <strong><1> offsetTop, offsetLeft, offsetWidth, offsetHeight</1></strong></p>
+<p>​    <strong><2> scrollTop/Left/Width/Height</2></strong></p>
+<p>​    <strong><3> clientTop/Left/Width/Height</3></strong></p>
+<p>​    <strong><4> width,height</4></strong></p>
+<p><strong>当你请求上面的一些属性的时候，浏览器为了给你最精确的值，需要flush队列，因为队列中可能会有影响到这些值的操作。即使你获取元素的布局和样式信息跟最近发生或改变的布局信息无关，浏览器都会强行刷新渲染队列</strong></p>
+<p><strong>//例如myElement元素沿对角线移动，每次移动一个像素。到500*500像素的位置结束。</strong></p>
+<p><strong>timeout循环体中可以这么做</strong></p>
+<p><strong>myElement.style.left = 1 + myElement.offsetLeft + ‘px’;</strong></p>
+<p><strong>myElement.style.top = 1 + myElement.offsetTop + ‘px’;</strong></p>
+<p><strong>if(**</strong>myElement.offsetLeft &gt;= 500<strong>**){</strong></p>
+<p><strong>stopAnimation();</strong></p>
+<p><strong>}</strong></p>
+<p><strong>//显然这种方法低效，每次移动都要查询偏移量，导致浏览器刷新渲染队列而不利于优化。好的办法是获取一次起始位置的值，然后赋值给一个变量。如下</strong></p>
+<p><strong>var current = myElement.offsetLeft;</strong></p>
+<p><strong>current++;</strong></p>
+<p><strong>myElement.style.left = current + ‘px’;</strong></p>
+<p><strong>myElement.style.top = current + ‘px’;</strong></p>
+<p><strong>if(myElement.offsetLeft &gt;= 500){</strong></p>
+<p><strong>stopAnimation();</strong></p>
+<p><strong>}</strong></p>
+<p><strong><4>将需要多次重排的元素，position属性设为absolute或fixed，元素脱离了文档流，它的变化不会影响到其他元素。</4></strong></p>
+<p><strong><5>如果需要创建多个DOM节点，可以使用DocumentFragment(文档碎片)创建完后一次性的加入document；</5></strong></p>
+<p><strong><6>尽量不要使用table布局。</6></strong></p>
+<p><strong><7>能用CSS3实现的就用CSS3实现</7></strong></p>
+<p><strong>重排重绘这些步骤都是在cpu中发生的。</strong></p>
+<p><strong>css3是在GPU中发生的：transform  opacity。</strong></p>
+<p><strong>在 GPU发生的属性比较高效。所以css3性能比较高。</strong></p>
+<p><strong><8>**</8></strong>尽量只给位置绝对或者固定的元素添加动画效果。**</p>
+<h1 id="二、页面的渲染机制-过程"><a href="#二、页面的渲染机制-过程" class="headerlink" title="二、页面的渲染机制/过程"></a><strong>二、页面的渲染机制/过程</strong></h1><h2 id="1、浏览器渲染主要流程"><a href="#1、浏览器渲染主要流程" class="headerlink" title="1、浏览器渲染主要流程"></a><strong>1、浏览器渲染主要流程</strong></h2><p><strong>不同的浏览器内核不同，所以渲染过程不太一样。</strong></p>
+<p>﻿<strong><img src="/2019/01/13/share-1/1.png" alt="1"></strong>﻿</p>
+<p><strong>WebKit 主流程:</strong></p>
+<p><strong>HTML -&gt; HTML解析器-&gt;DOM Tree-&gt;附加-&gt;渲染树(根据渲染树布局/重排)-&gt;重绘-&gt;显示</strong></p>
+<p><strong>样式表-&gt; CSS解析器-&gt;样式规则-&gt;链接</strong></p>
+<p>﻿<strong><img src="/2019/01/13/share-1/2.png" alt="2"></strong>﻿</p>
+<p>HTML-&gt;解析器-&gt;内容渗透-&gt;内容模型-&gt;框架构造器-&gt;框架树-&gt;重绘-&gt;显示</p>
+<p><strong>Mozilla 的 Gecko 呈现引擎主流程</strong></p>
+<p><strong>所以可以分析出基本过程：</strong></p>
+<ol>
+<li><strong>HTML解析出DOM Tree</strong></li>
+<li><strong>CSS解析出Style Rules</strong></li>
+<li><strong>将二者关联生成Render Tree</strong></li>
+<li><strong>Layout 根据Render Tree计算每个节点的信息</strong></li>
+<li><strong>Painting 根据计算好的信息绘制整个页面</strong></li>
+</ol>
+<h1 id="三、在chrome浏览器中performance中彩色盘："><a href="#三、在chrome浏览器中performance中彩色盘：" class="headerlink" title="三、在chrome浏览器中performance中彩色盘："></a><strong>三、在chrome浏览器中performance中彩色盘：</strong></h1><h3 id="Chrome调试工具查看页面渲染顺序"><a href="#Chrome调试工具查看页面渲染顺序" class="headerlink" title="Chrome调试工具查看页面渲染顺序"></a><strong>Chrome调试工具查看页面渲染顺序</strong></h3><p><strong>页面的渲染详细过程可以通过chrome开发者工具中的timeline查看</strong></p>
+<p>﻿<strong><img src="/2019/01/13/share-1/3.png" alt="3"></strong>﻿</p>
+<ol>
+<li><strong>发起请求；</strong></li>
+<li><strong>解析HTML；</strong></li>
+<li><strong>解析样式；</strong></li>
+<li><strong>执行JavaScript；</strong></li>
+<li><strong>布局；</strong></li>
+<li><strong>绘制</strong></li>
+</ol>
+<p><strong>蓝色(Loading)：网络通信和HTML解析</strong></p>
+<p><strong>黄色(Scripting)：JavaScript执行</strong></p>
+<p><strong>紫色(Rendering)：样式计算和布局，即重排</strong></p>
+<p><strong>绿色(Painting)：重绘</strong></p>
+<p><strong>灰色(other)：其它事件花费的时间</strong></p>
+<p><strong>白色(Idle)：空闲时间</strong></p>
+<p>s</p>
+<p><strong>以途虎微信站为例：</strong></p>
+<h3 id="Loading事件"><a href="#Loading事件" class="headerlink" title="Loading事件"></a><strong>Loading事件</strong></h3><table>
+<thead>
+<tr>
+<th><strong>事件</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Parse HTML</strong></td>
+<td><strong>浏览器执行HTML解析</strong></td>
+</tr>
+<tr>
+<td><strong>Finish Loading</strong></td>
+<td><strong>网络请求完毕事件</strong></td>
+</tr>
+<tr>
+<td><strong>Receive Data</strong></td>
+<td><strong>请求的响应数据到达事件，如果响应数据很大（拆包），可能会多次触发该事件</strong></td>
+</tr>
+<tr>
+<td><strong>Receive Response</strong></td>
+<td><strong>响应头报文到达时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Send Request</strong></td>
+<td><strong>发送网络请求时触发</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Scripting事件"><a href="#Scripting事件" class="headerlink" title="Scripting事件"></a><strong>Scripting事件</strong></h3><table>
+<thead>
+<tr>
+<th><strong>事件</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Animation Frame Fired</strong></td>
+<td><strong>一个定义好的动画帧发生并开始回调处理时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Cancel Animation Frame</strong></td>
+<td><strong>取消一个动画帧时触发</strong></td>
+</tr>
+<tr>
+<td><strong>GC Event</strong></td>
+<td><strong>垃圾回收时触发</strong></td>
+</tr>
+<tr>
+<td><strong>DOMContentLoaded</strong></td>
+<td><strong>当页面中的DOM内容加载并解析完毕时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Evaluate Script</strong></td>
+<td><strong>A script was evaluated.</strong></td>
+</tr>
+<tr>
+<td><strong>Event</strong></td>
+<td><strong>js事件</strong></td>
+</tr>
+<tr>
+<td><strong>Function Call</strong></td>
+<td><strong>只有当浏览器进入到js引擎中时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Install Timer</strong></td>
+<td><strong>创建计时器（调用setTimeout()和setInterval()）时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Request Animation Frame</strong></td>
+<td><strong>A requestAnimationFrame() call scheduled a new frame</strong></td>
+</tr>
+<tr>
+<td><strong>Remove Timer</strong></td>
+<td><strong>当清除一个计时器时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Time</strong></td>
+<td><strong>调用console.time()触发</strong></td>
+</tr>
+<tr>
+<td><strong>Time End</strong></td>
+<td><strong>调用console.timeEnd()触发</strong></td>
+</tr>
+<tr>
+<td><strong>Timer Fired</strong></td>
+<td><strong>定时器激活回调后触发</strong></td>
+</tr>
+<tr>
+<td><strong>XHR Ready State Change</strong></td>
+<td><strong>当一个异步请求为就绪状态后触发</strong></td>
+</tr>
+<tr>
+<td><strong>XHR Load</strong></td>
+<td><strong>当一个异步请求完成加载后触发</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Rendering事件"><a href="#Rendering事件" class="headerlink" title="Rendering事件"></a><strong>Rendering事件</strong></h3><table>
+<thead>
+<tr>
+<th><strong>事件</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Invalidate layout</strong></td>
+<td><strong>当DOM更改导致页面布局失效时触发</strong></td>
+</tr>
+<tr>
+<td><strong>Layout</strong></td>
+<td>页面布局计算执行时触发</td>
+</tr>
+<tr>
+<td>Recalculate style</td>
+<td>Chrome重新计算元素样式时触发</td>
+</tr>
+<tr>
+<td>Scroll</td>
+<td>内嵌的视窗滚动时触发</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Painting事件"><a href="#Painting事件" class="headerlink" title="Painting事件"></a>Painting事件</h3><table>
+<thead>
+<tr>
+<th><strong>事件</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Composite Layers</td>
+<td>Chrome的渲染引擎完成图片层合并时触发</td>
+</tr>
+<tr>
+<td>Image Decode</td>
+<td>一个图片资源完成解码后触发</td>
+</tr>
+<tr>
+<td>Image Resize</td>
+<td>一个图片被修改尺寸后触发</td>
+</tr>
+<tr>
+<td>Paint</td>
+<td>合并后的层被绘制到对应显示区域后触发</td>
+</tr>
+</tbody>
+</table>
+<p>﻿<img src="/2019/01/13/share-1/4.png" alt="4">﻿</p>
+<h1 id=""><a href="#" class="headerlink" title=" "></a> </h1><h1 id="四、智能事件处理"><a href="#四、智能事件处理" class="headerlink" title="四、智能事件处理"></a>四、智能事件处理</h1><h2 id="1、脚本处理"><a href="#1、脚本处理" class="headerlink" title="1、脚本处理"></a><strong>1、脚本处理</strong></h2><p><strong>浏览器解析文档，当遇到<script>标签的时候，会立即解析脚本，停止解析文档（因为JS可能会改动DOM和CSS，所以继续解析会造成浪费）。</strong></p>
+<p><strong>如果脚本是外部的，会等待脚本下载完毕，再继续解析文档。现在可以在script标签上增加属性 defer或者async。</strong></p>
+<p><strong>脚本解析会将脚本中改变DOM和CSS的地方分别解析出来，追加到DOM Tree和Style Rules上。</strong></p>
+<p><strong>(1)、嵌入JS导致CSS阻塞加载的问题：</strong></p>
+<head>
+
+
+<p><code>&lt;link type=&quot;text/css&quot; rel=&quot;stylesheet&quot; href=&quot;xx&quot; /&gt;</code></p>
+<script>
+
+`function a() {}`
+
+`</script>`
+
+``
+
+`<body>`
+
+`<image src="xxx.png">`
+
+`</image></body>`
+
+
+
+CSS和图片并没有并行下载，而是等待CSS下载完毕后才去并行下载后面的2个图片，当CSS后面跟着嵌入的JS的时候，该CSS就会出现阻塞后面资源下载的情况。
+
+这样做是为了确保内嵌脚本在执行时能够获得正确的样式信息。所以，最好不要把内嵌脚本放在CSS的<link>之后。
+
+
+
+（2）、defer   和   async
+
+async 则是一个乱序执行的主，对它来说脚本的加载和执行是紧紧挨着的，所以不管你声明的顺序如何，只要它加载完了就会立刻执行，async 对于应用脚本的用处不大，因为它完全不考虑依赖（哪怕是最低级的顺序执行），不过它对于那些可以不依赖任何脚本或不被任何脚本依赖的脚本来说却是非常合适的，最典型的例子：Google Analytics。
+
+
+
+
+
+<script defer="defer" src="main1.js"></script>
+
+<script defer="defer" src="main2.js"></script>
+
+<p>HTML5规范要求脚本按照它们出现的先后顺序执行，因此第一个延迟脚本会先于第二个延迟脚本执行，而这两个脚本会先于DOMContentLoaded事件。</p>
+<h2 id="2、脚本位置"><a href="#2、脚本位置" class="headerlink" title="2、脚本位置"></a>2、脚本位置</h2><p>（1）很多人喜欢把外链脚本放在head标签内，因为那样更加美观方便。但是当浏览器解析到外链脚本时，会停下来下载脚本执行脚本再继续向后解析，也就是说会导致页面阻塞，在脚本执行完毕之前页面将是一片空白。</p>
+<p>（2）另外，脚本的下载和执行也不是并行的，如引入了1.js和2.js，那么整个过程将会是：下载1.js -&gt; 执行1.js -&gt; 下载2.js -&gt; 执行2.js，显然效率很差。虽然IE8、Firefox2.5、Safari4和Chrome2开始允许脚本的并行下载，但是遗憾的是后续资源（样式、图片）的加载仍然需要等待脚本的下载和执行完毕。</p>
+<p>（3）结论：脚本推荐放在末尾，让页面先显示出来，让页面加载看起来没有那么慢。</p>
+<h2 id="3、组织脚本"><a href="#3、组织脚本" class="headerlink" title="3、组织脚本"></a>3、组织脚本</h2><p>（1）因为页面每次遇到<script>标签都会停下来解析执行，所以应该尽可能减少<script>标签的数量</p>
+<p>（2）HTTP请求存在一定的开销，100K的文件比5个20K的文件下载的更快，所以较少脚本数量也是很有必要的</p>
+<p>（3）当依赖的JS文件太多时，可以用一些打包工具进行打包</p>
+<p>（4）内嵌脚本如果紧跟外链样式表后面会导致页面阻塞去等待样式表的下载，这样做是为了保证JS获取到最精确的样式信息，而如果HTML放在外链样式表和内嵌脚本之间是无阻塞加载的，所以建议内嵌脚本不要紧跟<link>标签</p>
+<h2 id="4、无阻塞脚本"><a href="#4、无阻塞脚本" class="headerlink" title="4、无阻塞脚本"></a>4、无阻塞脚本</h2><p>之前所说的通过合并文件限制HTTP请求在大型网站面前效果就比较差了，当下载一个较大的脚本时会阻塞浏览器一段较长的事件，解决方案一个是在onload之后下载脚本，还有就是异步下载脚本。</p>
+<h3 id="（1）延迟加载脚本"><a href="#（1）延迟加载脚本" class="headerlink" title="（1）延迟加载脚本"></a>（1）延迟加载脚本</h3><p>// HTML4中可以使用defer属性来延迟加载脚本</p>
+<p>// defer的脚本会在页面加载完成之后window.onload事件触发之前执行</p>
+<p>// 局限性：只被 IE 4 和 Firefox 3.5 更高版本的浏览器所支持</p>
+<script type="text/javascript" src="script1.js" defer></script>
+
+
+
+</p><p>// HTML5定义了一个新的拓展属性：async</p>
+<p>// 它的作用和defer一样，能够异步地加载和执行脚本</p>
+<p>// 缺点：async下，只要脚本下载好就执行，不是按照原本的顺序来执行的</p>
+<h3 id="（2）动态脚本元素，这个最常用也是最有效的"><a href="#（2）动态脚本元素，这个最常用也是最有效的" class="headerlink" title="（2）动态脚本元素，这个最常用也是最有效的"></a>（2）动态脚本元素，这个最常用也是最有效的</h3><p>// 通过JS创建script标签，这样里面脚本的加载和执行就会变成异步的 </p>
+<p>// 问题：脚本下载完后就马上执行，可能会依赖顺序问题，如B用到了A中函数，但是B先下载完了</p>
+<p>var script = document.createElement(“script”);</p>
+<p>script.type = “text/javascript”;</p>
+<p>script.src = “script1.js”;</p>
+<p>document.getElementByTagName(“head”)[0].appendChild(script);</p>
+<p>// 解决这个依赖问题- Firefox、Opera, Chorme 和 Safari 3+</p>
+<p>// script有一个onload事件，表示加载完毕</p>
+<p>script.onload = function(){</p>
+<p>​    alert(“Script loaded!”);</p>
+<p>}</p>
+<p>// IE总是喜欢特例独行，你懂得，每个script标签都有一个状态，通过检测状态来判断执行情况 </p>
+<p>script.onreadystatechange = function(){</p>
+<p>​    //因为loaded和complete都有几率出现，并不是唯一的</p>
+<p>​    if(script.readyState == “loaded” || script.readyState == “complete”){</p>
+<p>​        script.onreadystatechange = null //避免事件重复处理</p>
+<p>​        alert(“Script loaded.”);</p>
+<p>​    }</p>
+<p>}</p>
+<p>// 我们来把它封装一下，让他变得通用，而不再受限浏览器 </p>
+<p>function loadScript(url,callback){</p>
+<p>​    var script = document.createElement(“script”)</p>
+<p>​    script.type = “text/javascript”;</p>
+<p>​    if(script.readyState){ // IE</p>
+<p>​        script.onreadystatechange = function(){</p>
+<p>​            if(script.readyState == “loaded” || script.readyState == “complete”){</p>
+<p>​                script.onreadystatechange = null;</p>
+<p>​                callback();</p>
+<p>​            }</p>
+<p>​        };</p>
+<p>​    }</p>
+<p>​    else { // Others</p>
+<p>​        script.onload = function(){</p>
+<p>​            callback();</p>
+<p>​        }</p>
+<p>​    }</p>
+<p>​    script.src = url;</p>
+<p>​    document.getElementByTagName(“head”)[0].appendChild(script);</p>
+<p>}</p>
+<p>//使用它</p>
+<p>loadScript(“script1.js”,function(){</p>
+<p>   alert(“File is loaded”); </p>
+<p>});</p>
+<p>//保证依赖顺序</p>
+<p>loadScript(“script1.js”,function(){</p>
+<p>​    loadScript(“script2.js”,function(){</p>
+<p>​        loadScript(“script3.js”,function(){</p>
+<p>​            alert(“All files are loaded!”);</p>
+<p>​        });</p>
+<p>​    });</p>
+<p>});</p>
+<h2 id="5、事件委托与冒泡"><a href="#5、事件委托与冒泡" class="headerlink" title="5、事件委托与冒泡"></a>5、事件委托与冒泡</h2><p>事件委托，首先按字面的意思就能看的出来，是将事件交由别人来执行，再联想到上面讲的事件冒泡，是不是想到了？对，就是将子元素的事件通过冒泡的形式交由父元素来执行。</p>
+<p>因为事件句柄会消耗大量性能，所以需要尽量少地触发事件，如一个DIV中有十个按钮需要事件句柄，那么我们可以将事件句柄放到DIV上，在事件冒泡过程中捕获该事件后再判断事件来源，这可能会增加事件句柄的复杂性，但是一定会提升总体性能。</p>
+<p>如果有大量的元素需要绑定时间，尝试使用事件委托。分三步：</p>
+<ul>
+<li>判断事件来源</li>
+<li>根据不同来源，进行不同操作</li>
+<li>取消冒泡，阻止默认行为(可选)</li>
+</ul>
+<p>document.querySelector(‘#nav’).onclick=function (e) {</p>
+<p>​            if (e.target.nodeName==’A’){</p>
+<p>​                foo();</p>
+<p>​            }else{</p>
+<p>​                foo2()</p>
+<p>​            }</p>
+<p>}</p>
+<h3 id="5-1-事件冒泡："><a href="#5-1-事件冒泡：" class="headerlink" title="5.1 事件冒泡："></a>5.1 事件冒泡：</h3><p>通俗易懂的来讲，就是当一个子元素的事件被触发的时候（如onclick事件），该事件会从事件源（被点击的子元素）开始逐级向上传播，触发父级元素的点击事件。</p>
+<h3 id="（1）要是不给子元素添加具体的oncilck处理方法，也能冒泡么？"><a href="#（1）要是不给子元素添加具体的oncilck处理方法，也能冒泡么？" class="headerlink" title="（1）要是不给子元素添加具体的oncilck处理方法，也能冒泡么？"></a>（1）要是不给子元素添加具体的oncilck处理方法，也能冒泡么？</h3><p>发现子元素在没有定义具体的click处理函数的时候仍然可以冒泡，触发父级元素的click事件。</p>
+<h3 id="（2）子元素触发的事件冒泡会触发父元素所有的事件么？还是触发对应的事件？"><a href="#（2）子元素触发的事件冒泡会触发父元素所有的事件么？还是触发对应的事件？" class="headerlink" title="（2）子元素触发的事件冒泡会触发父元素所有的事件么？还是触发对应的事件？"></a>（2）子元素触发的事件冒泡会触发父元素所有的事件么？还是触发对应的事件？</h3><p>我们发现只有相应的事件会发生事件冒泡，不相关的事件不受影响（注意由于click为鼠标的点击，所以同样会触发mousedown与mouseup等相关事件，同时发生冒泡！）</p>
+<h3 id="（3）我们应该如何组织这讨厌的事件冒泡机制呢？"><a href="#（3）我们应该如何组织这讨厌的事件冒泡机制呢？" class="headerlink" title="（3）我们应该如何组织这讨厌的事件冒泡机制呢？"></a>（3）<strong>我们应该如何组织这讨厌的事件冒泡机制呢？</strong></h3><p>很简单，在事件触发时，会传入一个相应的event对象，其中有一个stopPropagation()方法可以阻止事件冒泡（IE中为cancleBubble=true），return false</p>
+<h3 id="5-2-示例："><a href="#5-2-示例：" class="headerlink" title="5.2 示例："></a>5.2 示例：</h3><p>下面经过详细的例子来说明事件委托：</p>
+<p>有可能在开发的时候会遇到这种情况：如导航每一个栏目都要加一个事件，你可能会通过遍历来给每个栏目添加事件：</p>
+<ul id="parentUl"><br><br>​        <li>我还是个孩子</li><br><br>​        <li>我还是个孩子</li><br><br>​        <li>我还是个孩子</li><br><br>​        <li>我还是个孩子</li><br><br>​        <li>我还是个孩子</li><br><br>​    </ul>
+
+<p> var ul = document.getElementById(‘parentUl’),</p>
+<p>​            li = ul.getElementsByTagName(‘li’);</p>
+<p>​    for (var i = 0; i&lt;li.length;i++){</p>
+<p>​        li[i].onclick=function () {</p>
+<p>​            alert(this.innerHTML);</p>
+<p>​        }</p>
+<p>​    }</p>
+<p>这种方式来添加事件固然简单，但是需要多次操作DOM不断的与dom节点进行交互，访问dom的次数越多，引起浏览器重绘与重排的次数也就越多，就会延长整个页面的交互就绪时间，如果有100、1000个同级的元素需要添加事件，这种方式简直不忍直视，</p>
+<p>而且当我们动态添加新的Li元素的时候，新添加的Li元素是没有被绑定事件的。。。但是下面可以解决这个问题：</p>
+<p>var ul = document.getElementById(‘parentUl’),</p>
+<p>​            li = ul.getElementsByTagName(‘li’);</p>
+<p>​    function addClick() {</p>
+<p>​        for (var i = 0; i&lt;li.length;i++){</p>
+<p>​            li[i].onclick=function () {</p>
+<p>​                alert(this.innerHTML);</p>
+<p>​            }</p>
+<p>​        }</p>
+<p>​    }</p>
+<p>​    addClick();</p>
+<p>​    function addElement() {</p>
+<p>​        var li = document.createElement(‘li’);</p>
+<p>​        li.innerHTML=”我是新孩子”;</p>
+<p>​        ul.appendChild(li);</p>
+<p>​        addClick();</p>
+<p>​    }</p>
+<p>​    addElement();</p>
+<p>这样问题不就解决了么！根本不需要什么事件委托！</p>
+<p>这样确实解决了问题但是又增加了操作DOM的次数，大大降低了性能，让我们来看一下通过事件委托是怎样降低DOM操作次数：</p>
+<p>var ul = document.getElementById(‘parentUl’);</p>
+<p>​    ul.onclick=function (event) {</p>
+<p>​      var e = event||window.event,</p>
+<p>​              source = e.target || e.srcElement;//target表示在事件冒泡中触发事件的源元素，在IE中是srcElement</p>
+<p>​        if(source.nodeName.toLowerCase() == “li”){   //判断只有li触发的才会输出内容</p>
+<p>​            alert(source.innerHTML);</p>
+<p>​        }</p>
+<p>​        stopPropagation(e);                           //阻止继续冒泡</p>
+<p>​    };</p>
+<p>​    function addElement() {</p>
+<p>​        var li = document.createElement(‘li’);</p>
+<p>​        li.innerHTML=”我是新孩子”;</p>
+<p>​        ul.appendChild(li);</p>
+<p>​    }</p>
+<p>​       可以通过运行结果看见，新添加的子元素也可以成功通过事件委托显示内容，红色的为li中包含的span，由于代码中将源元素进行了过滤所以不会输出内容。事件委托不仅实现相同了功能，而且大大减少了DOM操作。有朋友可能会问，那我想要给每个li进行不同的处理呢？当然这个可以解决，我们可以通过ev.target获得源元素，就可以获取到data-id等属性或者自定义属性，并通过判断来进行不同的操作。</p>
+<p>现在给一个场景 ul &gt; li &gt; div &gt; p，div占满li，p占满div，还是给ul绑定时间，需要判断点击的是不是li（假设li里面的结构是不固定的），那么e.target就可能是p，也有可能是div，这种情况你会怎么处理呢？</p>
+<ul id="test"><br><br>​        <li><br><br>            <p>11111111111</p><br><br>​        </li><br><br>​        <li><br><br>            <div><br><br>​            </div><br><br>​        </li><br><br>​        <li><br><br>​            <span>3333333333</span><br><br>​        </li><br><br>​        <li>4444444</li><br><br>​    </ul>
+
+
+
+<p>如上列表，有4个li，里面的内容各不相同，点击li，event对象肯定是当前点击的对象，怎么指定到li上，下面我直接给解决方案：</p>
+<p>var oUl = document.getElementById(‘test’);</p>
+<p>​    oUl.addEventListener(‘click’,function(ev){</p>
+<p>​        var target = ev.target;</p>
+<p>​        while(target !== oUl ){</p>
+<p>​            if(target.tagName.toLowerCase() == ‘li’){</p>
+<p>​                console.log(‘li click~’);</p>
+<p>​                break;</p>
+<p>​            }</p>
+<p>​            target = target.parentNode;</p>
+<p>​        }</p>
+<p>​    })</p>
+<p> 核心代码是while循环部分，实际上就是一个递归调用，你也可以写成一个函数，用递归的方法来调用，同时用到冒泡的原理，从里往外冒泡，知道currentTarget为止，当当前的target是li的时候，就可以执行对应的事件了，然后终止循环</p>
+<h2 id="6、requestAnimationFrame优化更新页面"><a href="#6、requestAnimationFrame优化更新页面" class="headerlink" title="6、requestAnimationFrame优化更新页面"></a>6、requestAnimationFrame优化更新页面</h2><p>（1）requestAnimationFrame与setTimeout和setInterval类似，都是通过递归调用同一个方法不断更新页面。</p>
+<ul>
+<li>setTimeout()：在特定的时间后执行函数，而且只执行一次，如果在特定时间前想取消执行函数，可以用clearTimeout立即取消执行。但是并不是每次执行setTimeout都会在特定的时间后执行，页面加载后js会按照主线程中的顺序按序执行那个，如果在延迟时间内主线程不空闲，setTimeout里面的函数是不会执行的，它会延迟到主线程空闲时才执行，以上两种情况都会导致setTimeout的执行步调和屏幕的刷新步调不一致，从而引起<strong>丢帧</strong>现象。</li>
+<li>setInterval()：在特定的时间间隔内重复执行函数，除非主动清除它，不然会一直执行下去，清除函数可以使用clearInterval。setInterval也会等到主线程空闲了再执行，但是setInterval去排队时，如果发现自己还在队列中未执行，就会被drop掉，所以可能会造成某段时间的函数未被执行。</li>
+<li>requestAnimationFrame()：它不需要设置时间间隔，它会在浏览器每次刷新之前执行回调函数的任务。这样我们动画的更新就能和浏览器的刷新频率，根据屏幕刷新频率的高处就是使动画看起来更流畅不卡顿。requestAnimationFrame在运行时，浏览器会自动优化方法的调用，并且如果页面不是激活状态下的话，动画会自动暂停，有效节省了CPU开销。</li>
+</ul>
+<p>示例：</p>
+<p>var progress = 0;</p>
+<p>//回调函数</p>
+<p>function render() {</p>
+<p>​    progress += 1; //修改图像的位置</p>
+<p>​    if (progress &lt; 100) {</p>
+<p>​           //在动画没有结束前，递归渲染</p>
+<p>​           window.requestAnimationFrame(render);</p>
+<p>​    }</p>
+<p>}</p>
+<p>//第一帧渲染</p>
+<p>window.requestAnimationFrame(render);</p>
+<p>除此之外，requestAnimationFrame还有以下两个优势：</p>
+<ul>
+<li><strong>CPU节能</strong>：使用setTimeout实现的动画，当页面被隐藏或最小化时，setTimeout 仍然在后台执行动画任务，由于此时页面处于不可见或不可用状态，刷新动画是没有意义的，完全是浪费CPU资源。而requestAnimationFrame则完全不同，当页面处理未激活的状态下，该页面的屏幕刷新任务也会被系统暂停，因此跟着系统步伐走的requestAnimationFrame也会停止渲染，当页面被激活时，动画就从上次停留的地方继续执行，有效节省了CPU开销。</li>
+<li><strong>函数节流</strong>：在高频率事件(resize,scroll等)中，为了防止在一个刷新间隔内发生多次函数执行，使用requestAnimationFrame可保证每个刷新间隔内，函数只被执行一次，这样既能保证流畅性，也能更好的节省函数执行的开销。一个刷新间隔内函数执行多次时没有意义的，因为显示器每16.7ms刷新一次，多次绘制并不会在屏幕上体现出来。</li>
+</ul>
+<p>（2）优雅降级</p>
+<p>由于requestAnimationFrame目前还存在兼容性问题，而且不同的浏览器还需要带不同的前缀。因此需要通过优雅降级的方式对requestAnimationFrame进行封装，优先使用高级特性，然后再根据不同浏览器的情况进行回退，直止只能使用setTimeout的情况。</p>
+<table>
+<thead>
+<tr>
+<th>345678910111213141516171819202122232425</th>
+<th><strong>if</strong> (!Date.now)    Date.now = <strong>function</strong>() { <strong>return</strong> <strong>new</strong> Date().getTime(); }; (<strong>function</strong>() {    ‘use strict’;         <strong>var</strong> vendors = [‘webkit’, ‘moz’];    <strong>for</strong> (<strong>var</strong> i = 0; i &lt; vendors.length &amp;&amp; !window.requestAnimationFrame; ++i) {        <strong>var</strong> vp = vendors[i];        window.requestAnimationFrame = window[vp+’RequestAnimationFrame’];        window.cancelAnimationFrame = (window[vp+’CancelAnimationFrame’]                                   \</th>
+<th>\</th>
+<th>window[vp+’CancelRequestAnimationFrame’]);    }    <strong>if</strong> (/iP(ad\</th>
+<th>hone\</th>
+<th>od).<em>OS 6/.test(window.navigator.userAgent) </em>// iOS6 is buggy*        \</th>
+<th>\</th>
+<th>!window.requestAnimationFrame \</th>
+<th>\</th>
+<th>!window.cancelAnimationFrame) {        <strong>var</strong> lastTime = 0;        window.requestAnimationFrame = <strong>function</strong>(callback) {            <strong>var</strong> now = Date.now();            <strong>var</strong> nextTime = Math.max(lastTime + 16, now);            <strong>return</strong> setTimeout(<strong>function</strong>() { callback(lastTime = nextTime); },                              nextTime - now);        };        window.cancelAnimationFrame = clearTimeout;    }}());</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="7、吸顶导航条相关及scroll滚动优化"><a href="#7、吸顶导航条相关及scroll滚动优化" class="headerlink" title="7、吸顶导航条相关及scroll滚动优化"></a>7、吸顶导航条相关及scroll滚动优化</h2><h3 id="1、存在的问题"><a href="#1、存在的问题" class="headerlink" title="1、存在的问题"></a>1、存在的问题</h3><p>吸顶导航条要求当页面滚动到某个区域时，对应该区域的导航条在设置的显示范围内保持吸顶显示。涉及到的操作：</p>
+<ul>
+<li>监听页面的scroll事件</li>
+<li>在页面滚动时进行计算和DOM操作</li>
+<li>计算：计算当前所在位置是否为对应导航条的显示范围</li>
+<li>DOM操作：显示在范围内的导航条并且隐藏其他导航条</li>
+</ul>
+<p>由于scroll事件被触发的频率高、间隔近，如果此时进行DOM操作或计算并且这些DOM操作和计算无法在下一次scroll事件发生前完成，就会造成掉帧、页面卡顿，影响用户体验。</p>
+<h3 id="2、优化方案"><a href="#2、优化方案" class="headerlink" title="2、优化方案"></a>2、优化方案</h3><p>针对该项目中的问题，采取的解决方法是：</p>
+<p>（1）尽量控制DOM的显示或隐藏，而不是删除或添加：</p>
+<p>页面加载时根据当前页面中吸顶导航的数量复制对应的DOM，并且隐藏这些导航。当页面滚动到指定区域后，显示对应的导航。</p>
+<p>（2）一次性操作DOM:</p>
+<p>将复制的DOM存储到数组中，将该数组append到对应的父节点下，而不是根据复制得到DOM的数量依次循环插入到父节点下。</p>
+<p>（3）多做缓存:</p>
+<p>如果某个节点将在后续进行多次操作，可以将该节点利用变量存储起来，而不是每次进行操作时都去查找一遍该节点。</p>
+<p>（4）使用 requestAnimationFrame优化页面滚动</p>
+<h1 id="五、svg和canvas的不同场景的使用区别"><a href="#五、svg和canvas的不同场景的使用区别" class="headerlink" title="五、svg和canvas的不同场景的使用区别"></a>五、svg和canvas的不同场景的使用区别</h1><h2 id="1、各自的特点和区别"><a href="#1、各自的特点和区别" class="headerlink" title="1、各自的特点和区别"></a>1、各自的特点和区别</h2><ol>
+<li>canvas</li>
+<li>html5新增的新的标签</li>
+<li>通过javascript来绘制2D图像的，且逐像素进行渲染的</li>
+<li>canvas使用javascript在网页上绘制图像，本身并没有绘制能力</li>
+<li>在Canvas中一旦图形被绘制完成，它就不会得到浏览器的关注，一旦其位置发生变化，那么整个场景需要重新绘制，包括任何已被该图形覆盖了的图形</li>
+<li>canvas 的动画其实是逐帧渲染的，因为每一次绘制其实都是一个静态的，通过不断的 计算和rerender，来实现动效</li>
+</ol>
+<ol>
+<li>svg</li>
+<li>SVG 是一种基于 XML 语法的图像格式，全称是可缩放矢量图（Scalable Vector Graphics）</li>
+<li>SVG 则是属于对图像的形状描述，所以它本质上是文本文件，体积较小，且不管放大多少倍都不会失真</li>
+<li>因为是基于XML，那么svg DOM中的每一个元素都可以，绑定上javascript事件处理器</li>
+<li>SVG并不属于html5专有内容，在html5之前就有SVG</li>
+<li>svg 其实和我们传统的 dom 动画类似，他支持类似 css 中的 transform 、transition 等等来实现动画，也可以通过 js 获取 svg 节点来改变 style 属性来实现动画，总体来说还是和传统的 dom 实现动画思路较为一致</li>
+</ol>
+<ol>
+<li>两者区别</li>
+<li>canvas依赖分辨率, svg不依赖分辨率</li>
+<li>canvas不支持事件绑定, svg支持事件处理器</li>
+<li>canvas弱的文本渲染能力</li>
+<li>canvas能够以.png和.jpg的格式保存结果图像</li>
+<li>canvas最适合图像密集的游戏，其中许多对象将会被频繁重绘</li>
+<li>svg最适合带有大型渲染区域的应用程序（比如谷歌地图）</li>
+<li>svg复杂度高会减慢渲染速度（任何过度使用DOM的应用都不快）,所以svg不适合做游戏应用</li>
+</ol>
+<ol>
+<li>总结</li>
+</ol>
+<p>﻿<img src="/2019/01/13/share-1/5.png" alt="5">﻿</p>
+<p>﻿<img src="https://images-cdn.shimo.im/IjWNAgEkBccNF8EF/7cc17f3b9ce5f0d879fdfa2be9a54ca0_hd.jpg!thumbnail" alt="img">﻿</p>
+<h2 id="2、各自的适用场景"><a href="#2、各自的适用场景" class="headerlink" title="2、各自的适用场景"></a>2、各自的适用场景</h2><ol>
+<li>canvas适用场景</li>
+<li>一些复杂动画或者游戏</li>
+<li>小画布、大数据量的场景</li>
+<li>一些令人印象深刻的图形效果，例如光线跟踪或滤镜</li>
+<li>实时数据的更新</li>
+</ol>
+<ol>
+<li>svg适用场景</li>
+<li>体积小  =&gt; 适用于移动端</li>
+<li>节点多 =&gt; 适用于静态图标或者复杂度不高的图表</li>
+<li>不依赖分辨率 =&gt; 适用于高保真文档查看和打印的应用场景</li>
+<li>画布非常大，有缩放、平移等高频的交互，或者移动端对内存占用量非常敏感等场景</li>
+</ol>
+<ol>
+<li>适用场景总结</li>
+</ol>
+<p>﻿<img src="/2019/01/13/share-1/6.png" alt="6">﻿﻿</p>
+<p><img src="/2019/01/13/share-1/7.png" alt="7"></p>
+<h1 id="六、DocumentFragment-文档碎片"><a href="#六、DocumentFragment-文档碎片" class="headerlink" title="六、DocumentFragment 文档碎片"></a>六、DocumentFragment 文档碎片</h1><h2 id="1、介绍和基本使用"><a href="#1、介绍和基本使用" class="headerlink" title="1、介绍和基本使用"></a>1、介绍和基本使用</h2><ol>
+<li>介绍</li>
+<li>documentFragment表示一个没有父级文件的最小文档对象，可以被当作一个轻量级的document对象</li>
+<li>它不是一个真是的DOM树的一部分，它的变化不会引起DOM树的重新渲染的操作</li>
+<li>在jquery中和vue中都使用了它来进行DOM操作优化</li>
+</ol>
+<ol>
+<li>基本使用</li>
+</ol>
+<p>// 创建</p>
+<p>let oFrag = document.createDocumentFragment()</p>
+<p>// 使用</p>
+<p>for(let i=0;i&lt;100;i++) { </p>
+<p>  let op=document.createElement(“P”)</p>
+<p>  let oText=document.createTextNode(i)</p>
+<p>  op.appendChild(oText)</p>
+<p>  oFrag.appendChild(op)</p>
+<p>} </p>
+<p>document.body.appendChild(oFrag)</p>
+<h2 id="2、用来优化界面性能"><a href="#2、用来优化界面性能" class="headerlink" title="2、用来优化界面性能"></a>2、用来优化界面性能</h2><ol>
+<li>基本优化</li>
+</ol>
+<p>// 在body中添加100个p元素</p>
+<p>// 基本写法</p>
+<p>for(var i=0;i&lt;100;i++) {</p>
+<p> var op=document.createElement(“p”);</p>
+<p> var oText=document.createTextNode(i);</p>
+<p> op.appendChild(oText); </p>
+<p> document.body.appendChild(op);</p>
+<p>}</p>
+<p>// 常规优化写法</p>
+<p>var lis = “”,</p>
+<p>​    ul = document.createElement(“ul”); </p>
+<p>for(var i = 1; i &lt;= 100; i++) {</p>
+<p> lis += “<li>第” + i + “行</li>“;</p>
+<p>}</p>
+<p>ul.innerHTML = lis; </p>
+<p>document.body.appendChild(ul);</p>
+<p>// documentFragment写法</p>
+<p>let oFrag = document.createDocumentFragment()</p>
+<p>for(let i=0;i&lt;100;i++) { </p>
+<p>  let op=document.createElement(“P”)</p>
+<p>  let oText=document.createTextNode(i)</p>
+<p>  op.appendChild(oText)</p>
+<p>  oFrag.appendChild(op)</p>
+<p>} </p>
+<p>document.body.appendChild(oFrag)</p>
+<p>// 在上述三种写法中    </p>
+<p>//    第一种性能最差，毋庸置疑</p>
+<p>//    第二种只进行了一次dom操作，和一次页面重绘，是一个好办法，但是对后续拓展和维护不友好，也无法封装成一个方法</p>
+<p>//    第三种方法操作了两次dom，和一次重绘，主要的是文档碎片插入完自动会被销毁碎片内容，页面上没有多出新的节点</p>
+<ol>
+<li>细节</li>
+</ol>
+<p>var oFrag=document.createDocumentFragment();</p>
+<p>for(var i=0;i&lt;100;i++) { </p>
+<p>  var op=document.createElement(“P”); </p>
+<p>  var oText=document.createTextNode(i); </p>
+<p>  op.appendChild(oText); </p>
+<p>  oFrag.appendChild(op); </p>
+<p>} </p>
+<p>document.body.appendChild(oFrag); </p>
+<p>for(var i=0;i&lt;100;i++) { </p>
+<p>  var op=document.createElement(“P”); </p>
+<p>  var oText=document.createTextNode(i);                 </p>
+<p>  op.appendChild(oText); </p>
+<p>  oFrag.appendChild(op); </p>
+<p>} </p>
+<p>document.body.appendChild(oFrag);</p>
+<p>// 你运行代码你会发现0-99,0-99</p>
+<p>// 说明了只要文档碎片一但被插入后，会进行一个碎片回收，清除，但是文档碎片容器还是存在的，我们不用再次重新再进行一次dom操作来进行创建文档碎片</p>
+<ol>
+<li>性能报告</li>
+<li>jquery作者John Resig给了性能测试报告﻿<img src="/2019/01/13/share-1/8.png" alt="8">﻿</li>
+</ol>
+<h3 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h3><ol>
+<li>在框架中的应用</li>
+<li>在jquery中</li>
+<li><img src="/2019/01/13/share-1/9.png" alt="9">﻿﻿<img src="/2019/01/13/share-1/10.png" alt="10">﻿</li>
+<li>在jq中有两个方法用到了，一个是support.js，用来判断浏览器支持程度的，另一个就是buildFragment.js，是专门用作jq内部进行dom操作的</li>
+<li>buildFragment 只在 domManip 和 jQuery.parseHTML 中使用</li>
+<li>domManip 则被 DOM 操作如 append、prepend、before、after 等方法的所依赖</li>
+<li>jQuery.parseHTML 则被init和load方法所依赖</li>
+<li>可以看出，几乎所有的DOM操作都使用了documentFragment来优化</li>
+<li>在vue 1 中</li>
+<li><img src="/2019/01/13/share-1/11.png" alt="11">﻿</li>
+<li>可以看到有很多方法都用到了documentFragment</li>
+<li>主要介绍个compile.js，它的主要功能是编译相关，也就是最后将虚拟DOM转化成真实DOM的过程，所以这里会对页面进行DOM操作；在这里也是使用了documentFragment进行了优化操作</li>
+<li>为什么Vue 2.x 中没有用documentFragment，因为Vue 2.x中使用了虚拟DOM</li>
+</ol>
+<ol>
+<li><strong>附：在chrome中查看页面的更新情况</strong></li>
+</ol>
+<ul>
+<li><img src="/2019/01/13/share-1/12.png" alt="12">﻿</li>
+</ul>
+<h1 id="七、js函数中的防抖和节流"><a href="#七、js函数中的防抖和节流" class="headerlink" title="七、js函数中的防抖和节流"></a>七、js函数中的防抖和节流</h1><h2 id="1、前言"><a href="#1、前言" class="headerlink" title="1、前言"></a>1、前言</h2><p>防抖（Debounce）和节流 （Throttle） 都是用来控制某个函数在一定时间内执行次数的多少以优化高频率执行js代码的一种技巧，两者相似而又不同。</p>
+<h2 id="2、概念"><a href="#2、概念" class="headerlink" title="2、概念"></a>2、概念</h2><p>​        函数防抖（debounce）是指在一定时间内，在动作被连续频繁触发的情况下，动作只会被执行一次，也就是说当调用动作过n毫秒后，才会执行该动作，若在这n毫秒内又调用此动作则将重新计算执行时间，所以短时间内的连续动作永远只会触发一次，比如说用手指一直按住一个弹簧，它将不会弹起直到你松手为止。</p>
+<p>​       函数节流是指一定时间内执行的操作只执行一次，也就是说即预先设定一个执行周期，当调用动作的时刻大于等于执行周期则执行该动作，然后进入下一个新周期，一个比较形象的例子是如果将水龙头拧紧直到水是以水滴的形式流出，那你会发现每隔一段时间，就会有一滴水流出。</p>
+<p>​       函数节流（throttle）与 函数防抖（debounce）都是为了限制函数的执行频次，以优化函数触发频率过高导致的响应速度跟不上触发频率，出现延迟，假死或卡顿的现象。</p>
+<p>​      比如如下的情况：</p>
+<p>​     (1) window对象的resize、scroll事件</p>
+<p>​     (2) 拖拽时的mousemove事件</p>
+<p>​     (3)文字输入、自动完成的keyup事件</p>
+<h2 id="3、应用场景"><a href="#3、应用场景" class="headerlink" title="3、应用场景"></a>3、应用场景</h2><p>​    1、函数防抖</p>
+<p>​         假设我们网站有个搜索框，用户输入文本我们会自动联想匹配出一些结果供用户选择。我们可能首先想到的做法就是监听keyup事件，然后异步去查询结果。这个方法本身是没错的，但是如果用户快速的输入了一连串的字符，假设是10个字符，那么就会在瞬间触发了10次的请求，这无疑不是我们想要的。我们想要的是用户停止输入的时候才去触发查询的请求，这时候防抖函数就可以帮到我们。</p>
+<p>   简短示例如下：</p>
+<p>function debounce(fn, delay) {</p>
+<p>​    let handle;</p>
+<p>​    return function (e) {</p>
+<p>​        // 取消之前的延时调用</p>
+<p>​        clearTimeout(handle);</p>
+<p>​        handle = setTimeout(() =&gt; {</p>
+<p>​            fn(e);</p>
+<p>​        }, delay);</p>
+<p>​    }</p>
+<p>}</p>
+<p>使用方式：</p>
+<p>1、window.addEventListener(‘resize’, debounce(fun, 500));</p>
+<p>// 函数防抖</p>
+<p>2、var timer = null;</p>
+<p>document.getElementById(“debounce”).onscroll = function(){</p>
+<p>​    clearTimeout(timer); // 清除未执行的代码，重置回初始化状态</p>
+<p>​    timer = setTimeout(function(){</p>
+<p>​        console.log(“函数防抖”);</p>
+<p>​    }, 300);</p>
+<p>};  </p>
+<p>​    2、函数节流</p>
+<p>​         如果我们现在需要做一个记录用户鼠标移动轨迹的小应用，像这种对流畅度有一定的要求的情况，再用上面的防抖函数就不合适了，如果用防抖函数会出现什么效果呢？如果鼠标移动速度较快，那么只有在我们每次鼠标停下来的时候才能发送当前的位置，但是如果我们每次移动都发送并记录鼠标的位置，那也是相当恐怖的，鼠标随便移动一下就会有成百上千条记录位置的请求发出去，这个时候我们就可以用到函数节流，节流顾名思义也就是个一段儿时间去发送一次位置，可以大大减少请求发送次数。</p>
+<p>简短示例如下：</p>
+<p>function throttle(fn, delay) {</p>
+<p>​    let runFlag = false;</p>
+<p>​    return function (e) {</p>
+<p>​        // 判断之前的调用是否完成</p>
+<p>​        if (runFlag) {</p>
+<p>​            return false;</p>
+<p>​        }</p>
+<p>​        runFlag = true;</p>
+<p>​        setTimeout(() =&gt; {</p>
+<p>​            fn(e);</p>
+<p>​            runFlag = false;</p>
+<p>​        }, delay)</p>
+<p>   }</p>
+<p> }</p>
+<p>更完善的使用参见lodash</p>
+<h1 id="八、简易的图片滚动懒加载"><a href="#八、简易的图片滚动懒加载" class="headerlink" title="八、简易的图片滚动懒加载"></a>八、简易的图片滚动懒加载</h1><h2 id="1、滚动加载"><a href="#1、滚动加载" class="headerlink" title="1、滚动加载"></a>1、滚动加载</h2><p>当访问一个页面的时候，先把img元素或是其他元素的背景图片路径替换成固定尺寸图片的路径（这样就只需请求一次），只有当图片出现在浏览器的可视区域内时，才设置图片正真的路径，让图片显示出来。这就是图片懒加载。</p>
+<h2 id="2、使用目的"><a href="#2、使用目的" class="headerlink" title="2、使用目的"></a>2、使用目的</h2><p>减少图片过多可能造成的卡顿问题，减少渲染成本。</p>
+<h2 id="3、实现方式"><a href="#3、实现方式" class="headerlink" title="3、实现方式"></a>3、实现方式</h2><p>  1、页面中的img元素，如果没有src属性，浏览器就不会发出请求去下载图片，一旦通过javascript设置了图片路径，浏览器才会送请求。</p>
+<p>  2、如何获取正真的路径，这个简单，现在正真的路径存在元素的“data-url”（这个名字起个自己认识好记的就行）属性里，要用的时候就取出来，再设置；</p>
+<p>  3、开始比较之前，先了解一些基本的知识，比如说如何获取某个元素的尺寸大小、滚动条滚动距离及偏移位置距离； </p>
+<p>﻿<img src="/2019/01/13/share-1/13.png" alt="13">﻿</p>
+<p>1）屏幕可视窗口大小：对应于图中1、2位置处</p>
+<p>原生方法：</p>
+<p>window.innerHeight 标准浏览器及IE9+ || document.documentElement.clientHeight 标准浏览器及低版本IE标准模式 ||</p>
+<p>document.body.clientHeight 低版本混杂模式</p>
+<p>jQuery方法：</p>
+<p> $(window).height() </p>
+<p>  2）浏览器窗口顶部与文档顶部之间的距离，也就是滚动条滚动的距离：也就是图中3、4处对应的位置；</p>
+<p>原生方法：</p>
+<p>window.pagYoffset——IE9+及标准浏览器 || document.documentElement.scrollTop 兼容ie低版本的标准模式 ||</p>
+<p>document.body.scrollTop 兼容混杂模式；</p>
+<p>jQuery方法：$(document).scrollTop(); </p>
+<p>  3）获取元素的尺寸：对应于图中5、6位置处；左边jquery方法，右边原生方法</p>
+<p>$(o).width() = o.style.width; </p>
+<p>$(o).innerWidth() = o.style.width+o.style.padding;</p>
+<p>$(o).outerWidth() = o.offsetWidth = o.style.width+o.style.padding+o.style.border;</p>
+<p>$(o).outerWidth(true) = o.style.width+o.style.padding+o.style.border+o.style.margin;</p>
+<p>​        注意：要使用原生的style.xxx方法获取属性，这个元素必须已经有内嵌的样式，如<div style="...."></div>；</p>
+<p>​        如果原先是通过外部或内部样式表定义css样式，必须使用o.currentStyle[xxx] || document.defaultView.getComputedStyle(0)[xxx]来获取样式值</p>
+<p>  4）获取元素的位置信息：对应与图中7、8位置处</p>
+<p>jQuery：</p>
+<p>$(o).offset().top元素距离文档顶的距离，</p>
+<p>$(o).offset().left元素距离文档左边缘的距离</p>
+<p>原生：getoffsetTop()，高程上有具体说明，这边就忽略了；</p>
+<p>返回元素相对于第一个以定位的父元素的偏移距离，注意与上面偏移距的区别；</p>
+<p>jQuery：position()返回一个对象，$(o).position().left = style.left，$(o).position().top = style.top；</p>
+<h2 id="4、可视窗口区域"><a href="#4、可视窗口区域" class="headerlink" title="4、可视窗口区域"></a>4、可视窗口区域</h2><p><img src="/2019/01/13/share-1/14.png" alt="14"></p>
+<h1 id="九、浅析浏览器网络缓存"><a href="#九、浅析浏览器网络缓存" class="headerlink" title="九、浅析浏览器网络缓存"></a>九、浅析浏览器网络缓存</h1><h2 id="1、前言-1"><a href="#1、前言-1" class="headerlink" title="1、前言"></a>1、前言</h2><p>缓存会根据请求保存输出内容的副本，例如 <strong>页面、图片、文件</strong>，当下一个请求来到的时候:如果是相同的URL，缓存直接使 用本地的副本响应访问请求，而不是向源服务器再次发送请求。因此，可以从以下 <strong>2</strong> 个方面提升性能：</p>
+<ul>
+<li>减少相应延迟，提升响应时间</li>
+<li>减少网络带宽消耗，节省流量</li>
+</ul>
+<h2 id="2、缓存机制"><a href="#2、缓存机制" class="headerlink" title="2、缓存机制"></a>2、缓存机制</h2><p>我们用两幅图来了解下浏览器的 <strong>缓存机制</strong></p>
+<p><strong>浏览器第一次请求：</strong></p>
+<p>﻿<img src="/2019/01/13/share-1/16.png" alt="16">﻿</p>
+<p><strong>浏览器再次请求：</strong></p>
+<p>﻿<img src="/2019/01/13/share-1/17.png" alt="17">﻿</p>
+<p>从以上两幅图中，可以清楚的了解浏览器 <strong>缓存</strong> 的过程。 首次访问一个 URL ，没有 <strong>缓存</strong> ，但是，服务器会响应一些 header 信息，如：expires、cache-control、last-modified、etag 等，来记录下次请求是否缓存、如何缓存。 再次访问这个 URL 时候，浏览器会根据首次访问返回的 header 信息，来决策是否缓存、如何缓存。 我们重点来分析下第二幅图，其实是分两条线路，如下 👇</p>
+<ul>
+<li><strong>第一条线路：</strong> 当浏览器再次访问某个 URL 时，会先获取资源的 header 信息，判断是否命中强缓存 <em>（cache-control和expires）</em> ，如命中，直接从缓存获取资源，包括响应的 header 信息 <em>（请求不会和服务器通信）</em> ，也就是 <strong>强缓存</strong> ，如图</li>
+</ul>
+<p>﻿<img src="/2019/01/13/share-1/18.png" alt="18">﻿</p>
+<ul>
+<li><strong>第二条线路：</strong> 如没有命中 <strong>强缓存</strong> ，浏览器会发送请求到服务器，请求会携带第一次请求返回的有关缓存的 header 信息 <em>（Last-Modified/If-Modified-Since和Etag/If-None-Match）</em> ，由服务器根据请求中的相关 header 信息来比对结果是否协商缓存命中；若命中，则服务器返回新的响应 header 信息更新缓存中的对应 header 信息，但是并不返回资源内容，它会告知浏览器可以直接从缓存获取；否则返回最新的资源内容，也就是 <strong>协商缓存</strong>。</li>
+</ul>
+<p>现在，我们了解到浏览器缓存机制分为 <strong>强缓存、协商缓存</strong>，再来看看他们的区别 👇</p>
+<table>
+<thead>
+<tr>
+<th><strong>缓存策略</strong></th>
+<th><strong>获取资源形式</strong></th>
+<th><strong>状态码</strong></th>
+<th><strong>发送请求到服务器</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>强缓存</td>
+<td>从缓存取</td>
+<td>200（from memory cache）</td>
+<td>否，直接从缓存取</td>
+</tr>
+<tr>
+<td>协商缓存</td>
+<td>从缓存取</td>
+<td>304（not modified）</td>
+<td>是，通过服务器来告知缓存是否可用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h3><p>与强缓存相关的 header 字段有两个：</p>
+<p>(1) expires</p>
+<p><strong>expires：</strong> 这是 http1.0 时的规范，它的值为一个绝对时间的 <strong>GMT</strong> 格式的时间字符串，如 Mon, 10 Jun 2015 21:31:12 GMT ，如果发送请求的时间在 <strong>expires</strong> 之前，那么本地缓存始终有效，否则就会发送请求到服务器来获取资源</p>
+<p>(2)cache-control</p>
+<p><strong>cache-control:</strong> max-age=number ，这是 http1.1 时出现的 header 信息，主要是利用该字段的 max-age 值来进行判断，它是一个相对值；资源第一次的请求时间和 <strong>Cache-Control</strong> 设定的有效期，计算出一个资源过期时间，再拿这个过期时间跟当前的请求时间比较，如果请求时间在过期时间之前，就能命中缓存，否则未命中， <strong>cache-control</strong> 除了该字段外，还有下面几个比较常用的设置值：</p>
+<ul>
+<li><strong>no-cache：</strong> 不使用本地缓存。需要使用缓存协商，先与服务器确认返回的响应是否被更改，如果之前的响应中存在 ETag ，那么请求的时候会与服务端验证，如果资源未被更改，则可以避免重新下载。</li>
+<li><strong>no-store：</strong> 直接禁止游览器缓存数据，每次用户请求该资源，都会向服务器发送一个请求，每次都会下载完整的资源。</li>
+<li><strong>public：</strong> 可以被所有的用户缓存，包括终端用户和 CDN 等中间代理服务器。</li>
+<li><strong>private：</strong> 只能被终端用户的浏览器缓存，不允许 CDN 等中继缓存服务器对其缓存。</li>
+</ul>
+<blockquote>
+<p><em>Tips：如果 cache-control 与 expires 同时存在的话，cache-control 的优先级高于 expires</em></p>
+</blockquote>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><p>协商缓存都是由浏览器和服务器协商，来确定是否缓存，协商主要通过下面两组 header 字段，这两组字段都是成对出现的，即第一次请求的响应头带上某个字段 <em>（</em> <strong>Last-Modified</strong> <em>或者</em> <strong>Etag</strong> <em>）</em> ，则后续请求会带上对应的请求字段 <em>（**</em>If-Modified-Since<strong> <em>或者</em> </strong>If-None-Match<strong> <em>）</em> ，若响应头没有 </strong>Last-Modified<strong> 或者 </strong>Etag** 字段，则请求头也不会有对应的字段。</p>
+<p><strong>Last-Modified/If-Modified-Since</strong></p>
+<p>二者的值都是 GMT 格式的时间字符串，具体过程：</p>
+<p>浏览器第一次跟服务器请求一个资源，服务器在返回这个资源的同时，在 respone 的 header 加上 <strong>Last-Modified</strong> 字段，这个 header 字段表示这个资源在服务器上的最后修改时间</p>
+<p>浏览器再次跟服务器请求这个资源时，在 request 的 header 上加上 <strong>If-Modified-Since</strong> 字段，这个 header 字段的值就是上一次请求时返回的 <strong>Last-Modified</strong> 的值</p>
+<p>服务器再次收到资源请求时，根据浏览器传过来 <strong>If-Modified-Since</strong> 和资源在服务器上的最后修改时间判断资源是否有变化，如果没有变化则返回 304 Not Modified ，但是不会返回资源内容；如果有变化，就正常返回资源内容。当服务器返回 304 Not Modified 的响应时，response header 中不会再添加 <strong>Last-Modified的header</strong> ，因为既然资源没有变化，那么 <strong>Last-Modified</strong> 也就不会改变，这是服务器返回 304 时的 response header</p>
+<p>浏览器收到 304 的响应后，就会从缓存中加载资源</p>
+<p>如果协商缓存没有命中，浏览器直接从服务器加载资源时，<strong>Last-Modified</strong> 的 Header 在重新加载的时候会被更新，下次请求时，<strong>If-Modified-Since</strong> 会启用上次返回的<strong>Last-Modified</strong> 值</p>
+<p><strong>Etag/If-None-Match</strong></p>
+<p>这两个值是由服务器生成的每个资源的唯一标识字符串，只要资源有变化就这个值就会改变；其判断过程与 <strong>Last-Modified、If-Modified-Since</strong> 类似，与 <strong>Last-Modified</strong> 不一样的是，当服务器返回 304 Not Modified 的响应时，由于 <strong>ETag</strong> 重新生成过，response header 中还会把这个 <strong>ETag</strong> 返回，即使这个 <strong>ETag</strong> 跟之前的没有变化。</p>
+<blockquote>
+</blockquote>
+<blockquote>
+<p><em>Tips：Last-Modified与ETag是可以一起使用的，服务器会优先验证ETag，一致的情况下，才会继续比对Last-Modified，最后才决定是否返回304。</em></p>
+</blockquote>
+<h2 id="3-比较"><a href="#3-比较" class="headerlink" title="3.比较"></a>3.比较</h2><p>1·强缓存﻿<img src="/2019/01/13/share-1/19.png" alt="19">﻿</p>
+<p>2.协商缓存</p>
+<p>﻿<img src="/2019/01/13/share-1/20.png" alt="20">﻿</p>
+</strong></p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/13/浏览器的渲染和Virtual DOM/" rel="next" title="浏览器的渲染和Virtual DOM">
+                <i class="fa fa-chevron-left"></i> 浏览器的渲染和Virtual DOM
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="zhouyunyun">
+            
+              <p class="site-author-name" itemprop="name">zhouyunyun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/DoubleYun" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/jiang-xian-sheng-76-30/activities" target="_blank" title="ZhiHu">
+                      
+                        <i class="fa fa-fw fa-skype"></i>ZhiHu</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、重排和重绘"><span class="nav-number">1.</span> <span class="nav-text">一、重排和重绘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。"><span class="nav-number">1.0.1.</span> <span class="nav-text">介绍浏览器运行机制，重绘和重排对前端性能的影响以及优化的解决方案。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1、重排和重绘的概念和区别"><span class="nav-number">1.1.</span> <span class="nav-text">1、重排和重绘的概念和区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如："><span class="nav-number">1.2.</span> <span class="nav-text">2、触发重排的条件：任何页面布局和几何属性的改变都会触发重排，比如：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、重绘发生的情况："><span class="nav-number">1.3.</span> <span class="nav-text">3、重绘发生的情况：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、几种优化方案："><span class="nav-number">1.4.</span> <span class="nav-text">4、几种优化方案：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（1）浏览器自己的优化："><span class="nav-number">1.5.</span> <span class="nav-text">（1）浏览器自己的优化：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（2）我们要注意的优化："><span class="nav-number">1.6.</span> <span class="nav-text">（2）我们要注意的优化：</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#二、页面的渲染机制-过程"><span class="nav-number">2.</span> <span class="nav-text">二、页面的渲染机制/过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、浏览器渲染主要流程"><span class="nav-number">2.1.</span> <span class="nav-text">1、浏览器渲染主要流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、在chrome浏览器中performance中彩色盘："><span class="nav-number">3.</span> <span class="nav-text">三、在chrome浏览器中performance中彩色盘：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chrome调试工具查看页面渲染顺序"><span class="nav-number">3.0.1.</span> <span class="nav-text">Chrome调试工具查看页面渲染顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loading事件"><span class="nav-number">3.0.2.</span> <span class="nav-text">Loading事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scripting事件"><span class="nav-number">3.0.3.</span> <span class="nav-text">Scripting事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rendering事件"><span class="nav-number">3.0.4.</span> <span class="nav-text">Rendering事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Painting事件"><span class="nav-number">3.0.5.</span> <span class="nav-text">Painting事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number">4.</span> <span class="nav-text"> </span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、智能事件处理"><span class="nav-number">5.</span> <span class="nav-text">四、智能事件处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、脚本处理"><span class="nav-number">5.1.</span> <span class="nav-text">1、脚本处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、脚本位置"><span class="nav-number">5.2.</span> <span class="nav-text">2、脚本位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、组织脚本"><span class="nav-number">5.3.</span> <span class="nav-text">3、组织脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#（2）动态脚本元素，这个最常用也是最有效的"><span class="nav-number">5.3.1.</span> <span class="nav-text">（2）动态脚本元素，这个最常用也是最有效的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、事件委托与冒泡"><span class="nav-number">5.4.</span> <span class="nav-text">5、事件委托与冒泡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-事件冒泡："><span class="nav-number">5.4.1.</span> <span class="nav-text">5.1 事件冒泡：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（1）要是不给子元素添加具体的oncilck处理方法，也能冒泡么？"><span class="nav-number">5.4.2.</span> <span class="nav-text">（1）要是不给子元素添加具体的oncilck处理方法，也能冒泡么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（2）子元素触发的事件冒泡会触发父元素所有的事件么？还是触发对应的事件？"><span class="nav-number">5.4.3.</span> <span class="nav-text">（2）子元素触发的事件冒泡会触发父元素所有的事件么？还是触发对应的事件？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（3）我们应该如何组织这讨厌的事件冒泡机制呢？"><span class="nav-number">5.4.4.</span> <span class="nav-text">（3）我们应该如何组织这讨厌的事件冒泡机制呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-示例："><span class="nav-number">5.4.5.</span> <span class="nav-text">5.2 示例：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6、requestAnimationFrame优化更新页面"><span class="nav-number">5.5.</span> <span class="nav-text">6、requestAnimationFrame优化更新页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7、吸顶导航条相关及scroll滚动优化"><span class="nav-number">5.6.</span> <span class="nav-text">7、吸顶导航条相关及scroll滚动优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、存在的问题"><span class="nav-number">5.6.1.</span> <span class="nav-text">1、存在的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、优化方案"><span class="nav-number">5.6.2.</span> <span class="nav-text">2、优化方案</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、svg和canvas的不同场景的使用区别"><span class="nav-number">6.</span> <span class="nav-text">五、svg和canvas的不同场景的使用区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、各自的特点和区别"><span class="nav-number">6.1.</span> <span class="nav-text">1、各自的特点和区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、各自的适用场景"><span class="nav-number">6.2.</span> <span class="nav-text">2、各自的适用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、DocumentFragment-文档碎片"><span class="nav-number">7.</span> <span class="nav-text">六、DocumentFragment 文档碎片</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、介绍和基本使用"><span class="nav-number">7.1.</span> <span class="nav-text">1、介绍和基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、用来优化界面性能"><span class="nav-number">7.2.</span> <span class="nav-text">2、用来优化界面性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#-1"><span class="nav-number">7.2.1.</span> <span class="nav-text"> </span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七、js函数中的防抖和节流"><span class="nav-number">8.</span> <span class="nav-text">七、js函数中的防抖和节流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、前言"><span class="nav-number">8.1.</span> <span class="nav-text">1、前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、概念"><span class="nav-number">8.2.</span> <span class="nav-text">2、概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、应用场景"><span class="nav-number">8.3.</span> <span class="nav-text">3、应用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八、简易的图片滚动懒加载"><span class="nav-number">9.</span> <span class="nav-text">八、简易的图片滚动懒加载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、滚动加载"><span class="nav-number">9.1.</span> <span class="nav-text">1、滚动加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、使用目的"><span class="nav-number">9.2.</span> <span class="nav-text">2、使用目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、实现方式"><span class="nav-number">9.3.</span> <span class="nav-text">3、实现方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、可视窗口区域"><span class="nav-number">9.4.</span> <span class="nav-text">4、可视窗口区域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#九、浅析浏览器网络缓存"><span class="nav-number">10.</span> <span class="nav-text">九、浅析浏览器网络缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、前言-1"><span class="nav-number">10.1.</span> <span class="nav-text">1、前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、缓存机制"><span class="nav-number">10.2.</span> <span class="nav-text">2、缓存机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强缓存"><span class="nav-number">10.2.1.</span> <span class="nav-text">强缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协商缓存"><span class="nav-number">10.2.2.</span> <span class="nav-text">协商缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-比较"><span class="nav-number">10.3.</span> <span class="nav-text">3.比较</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhouyunyun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
